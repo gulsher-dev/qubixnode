@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QubixNode — AI Tool Directory</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== NAVBAR (Dynamic Island style) ===== -->
+<header class="nav-wrapper" id="navWrapper">
+  <div class="nav-pill" id="navPill">
+
+    <a href="index.html" class="nav-logo">
+      <span class="logo-dot"></span> QubixNode
+    </a>
+
+    <nav class="nav-links">
+      <div class="nav-item" data-menu="tools">
+        <span>TOOLS</span>
+        <svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </div>
+      <div class="nav-item" data-menu="compare">
+        <span>COMPARE</span>
+        <svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </div>
+      <div class="nav-item" data-menu="reviews">
+        <span>REVIEWS</span>
+        <svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </div>
+      <a href="quiz.html" class="nav-item">
+        <span>QUIZ</span>
+      </a>
+    </nav>
+
+    <a href="tools.html" class="nav-cta">EXPLORE TOOLS →</a>
+
+    <div class="nav-collapsed-label">
+      <span class="pulse-dot"></span> MENU
+    </div>
+
+  </div>
+
+  <!-- ===== MEGA MENU PANELS ===== -->
+  <div class="mega-menu" id="megaMenu">
+
+    <div class="mega-panel" data-panel="tools">
+      <div class="mega-head">
+        <span class="mega-eyebrow">TOOLS</span>
+        <h2>Find the right AI tool, fast</h2>
+        <p>Browse the directory by category, or search for exactly what you need.</p>
+      </div>
+      <div class="mega-cols">
+        <div class="mega-col">
+          <h4>BROWSE BY CATEGORY</h4>
+          <a href="tools.html?cat=writing">✍️ Writing & Content</a>
+          <a href="tools.html?cat=image">🎨 Image & Design</a>
+          <a href="tools.html?cat=code">💻 Code & Dev</a>
+          <a href="tools.html?cat=video">🎬 Video & Audio</a>
+          <a href="tools.html?cat=productivity">📊 Productivity</a>
+          <a href="tools.html?cat=chatbots">🤖 Chatbots</a>
+        </div>
+        <div class="mega-col highlight-card">
+          <span class="hc-tag">NEW DROP</span>
+          <div class="hc-number">15</div>
+          <span class="hc-label">DAYS BETWEEN NEW TOOLS</span>
+          <a href="tools.html" class="hc-link">See What's New →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mega-panel" data-panel="compare">
+      <div class="mega-head">
+        <span class="mega-eyebrow">COMPARE</span>
+        <h2>Compare any 2 tools</h2>
+        <p>Pick two AI tools and see specs, pricing, and pros/cons side by side.</p>
+      </div>
+      <div class="mega-cols">
+        <div class="mega-col">
+          <a href="compare.html">⚖️ Start a Comparison</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mega-panel" data-panel="reviews">
+      <div class="mega-head">
+        <span class="mega-eyebrow">REVIEWS</span>
+        <h2>What people are saying</h2>
+        <p>Real ratings and reviews for every tool in the directory.</p>
+      </div>
+      <div class="mega-cols">
+        <div class="mega-col">
+          <a href="reviews.html">⭐ Browse All Reviews</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<main class="hero">
+  <span class="hero-badge">🔷 A new tool drops every 15 days</span>
+  <h1>Find the right AI tool.<br>Every time.</h1>
+  <p>Browse, compare, and read real reviews of the best AI tools — all in one place.</p>
+  <a href="tools.html" class="hero-cta">Explore the Directory</a>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
