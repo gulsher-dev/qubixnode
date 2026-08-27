@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Tool Directory — QubixNode</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== NAVBAR (Dynamic Island style) ===== -->
+<header class="nav-wrapper" id="navWrapper">
+  <div class="nav-pill" id="navPill">
+
+    <a href="index.html" class="nav-logo">
+      <span class="logo-dot"></span> QubixNode
+    </a>
+
+    <nav class="nav-links">
+      <div class="nav-item" data-menu="tools">
+        <span>TOOLS</span>
+        <svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </div>
+      <div class="nav-item" data-menu="compare">
+        <span>COMPARE</span>
+        <svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </div>
+      <div class="nav-item" data-menu="reviews">
+        <span>REVIEWS</span>
+        <svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </div>
+      <a href="quiz.html" class="nav-item">
+        <span>QUIZ</span>
+      </a>
+    </nav>
+
+    <a href="tools.html" class="nav-cta">EXPLORE TOOLS →</a>
+
+    <div class="nav-collapsed-label">
+      <span class="pulse-dot"></span> MENU
+    </div>
+
+  </div>
+
+  <!-- ===== MEGA MENU PANELS ===== -->
+  <div class="mega-menu" id="megaMenu">
+
+    <div class="mega-panel" data-panel="tools">
+      <div class="mega-head">
+        <span class="mega-eyebrow">TOOLS</span>
+        <h2>Find the right AI tool, fast</h2>
+        <p>Browse the directory by category, or search for exactly what you need.</p>
+      </div>
+      <div class="mega-cols">
+        <div class="mega-col">
+          <h4>BROWSE BY CATEGORY</h4>
+          <a href="tools.html?cat=writing">✍️ Writing & Content</a>
+          <a href="tools.html?cat=image">🎨 Image & Design</a>
+          <a href="tools.html?cat=code">💻 Code & Dev</a>
+          <a href="tools.html?cat=video">🎬 Video & Audio</a>
+          <a href="tools.html?cat=productivity">📊 Productivity</a>
+          <a href="tools.html?cat=chatbots">🤖 Chatbots</a>
+        </div>
+        <div class="mega-col highlight-card">
+          <span class="hc-tag">NEW DROP</span>
+          <div class="hc-number">15</div>
+          <span class="hc-label">DAYS BETWEEN NEW TOOLS</span>
+          <a href="tools.html" class="hc-link">See What's New →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mega-panel" data-panel="compare">
+      <div class="mega-head">
+        <span class="mega-eyebrow">COMPARE</span>
+        <h2>Compare any 2</h2>
+        <p>AI tools, laptops, phones, headphones — pick two and see them side by side.</p>
+      </div>
+      <div class="mega-cols">
+        <div class="mega-col">
+          <a href="compare.html">⚖️ Start a Comparison</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mega-panel" data-panel="reviews">
+      <div class="mega-head">
+        <span class="mega-eyebrow">REVIEWS</span>
+        <h2>What people are saying</h2>
+        <p>Real ratings and reviews for every tool in the directory.</p>
+      </div>
+      <div class="mega-cols">
+        <div class="mega-col">
+          <a href="reviews.html">⭐ Browse All Reviews</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</header>
+
+<!-- ===== DIRECTORY PAGE CONTENT ===== -->
+<main class="page-content">
+  <div class="page-hero">
+    <span class="section-eyebrow">DIRECTORY</span>
+    <h1>Find the right AI tool</h1>
+    <p>Browse by category, or search for exactly what you need.</p>
+  </div>
+
+  <div class="dir-search-wrap">
+    <input type="text" id="toolSearch" placeholder="Search tools... (e.g. writing, image, chatbot)" class="dir-search">
+  </div>
+
+  <div class="dir-tabs" id="dirTabs">
+    <div class="dir-tab active" data-cat="all">All</div>
+    <div class="dir-tab" data-cat="writing">✍️ Writing</div>
+    <div class="dir-tab" data-cat="image">🎨 Image</div>
+    <div class="dir-tab" data-cat="code">💻 Code</div>
+    <div class="dir-tab" data-cat="video">🎬 Video</div>
+    <div class="dir-tab" data-cat="productivity">📊 Productivity</div>
+    <div class="dir-tab" data-cat="chatbots">🤖 Chatbots</div>
+  </div>
+
+  <div class="tool-grid" id="toolGrid"></div>
+  <div class="empty-state" id="noResults" style="display:none;">No tools match your search — try a different term.</div>
+</main>
+
+<script>
+const TOOLS = [
+  { name:"ChatGPT", cat:"chatbots", desc:"General-purpose AI chatbot for writing, coding, brainstorming, and more.", price:"Freemium", rating:4.5, isNew:false },
+  { name:"Claude", cat:"chatbots", desc:"AI assistant built for long documents, writing, and thoughtful conversation.", price:"Freemium", rating:4.6, isNew:true },
+  { name:"Grammarly", cat:"writing", desc:"AI writing assistant for grammar, tone, and clarity as you type.", price:"Freemium", rating:4.4, isNew:false },
+  { name:"Jasper", cat:"writing", desc:"AI copywriting tool built for marketing teams and content at scale.", price:"Paid", rating:4.2, isNew:false },
+  { name:"Copy.ai", cat:"writing", desc:"Generate marketing copy, emails, and blog outlines in seconds.", price:"Freemium", rating:4.1, isNew:false },
+  { name:"Midjourney", cat:"image", desc:"High-quality AI image generation from text prompts, run via Discord.", price:"Paid", rating:4.7, isNew:false },
+  { name:"DALL-E", cat:"image", desc:"OpenAI's image generator, built into ChatGPT for quick visual creation.", price:"Freemium", rating:4.3, isNew:false },
+  { name:"Canva AI", cat:"image", desc:"AI-powered design tools built into Canva's editor — backgrounds, resizing, and more.", price:"Freemium", rating:4.5, isNew:false },
+  { name:"GitHub Copilot", cat:"code", desc:"AI pair programmer that autocompletes code directly in your editor.", price:"Paid", rating:4.5, isNew:false },
+  { name:"Cursor", cat:"code", desc:"AI-first code editor built around chat-driven code generation and edits.", price:"Freemium", rating:4.6, isNew:true },
+  { name:"Runway", cat:"video", desc:"AI video generation and editing — text-to-video, background removal, and more.", price:"Freemium", rating:4.3, isNew:false },
+  { name:"ElevenLabs", cat:"video", desc:"Realistic AI voice generation and cloning for narration and dubbing.", price:"Freemium", rating:4.6, isNew:false },
+  { name:"Notion AI", cat:"productivity", desc:"AI writing and summarizing built directly into your Notion workspace.", price:"Paid", rating:4.3, isNew:false },
+  { name:"Otter.ai", cat:"productivity", desc:"AI meeting notes and transcription that syncs with your calendar.", price:"Freemium", rating:4.2, isNew:false },
+  { name:"Perplexity", cat:"chatbots", desc:"AI search engine that answers questions with cited, up-to-date sources.", price:"Freemium", rating:4.5, isNew:false },
+];
+
+let activeCategory = 'all';
+let searchTerm = '';
+
+function renderTools() {
+  const grid = document.getElementById('toolGrid');
+  const noResults = document.getElementById('noResults');
+
+  const filtered = TOOLS.filter(tool => {
+    const matchesCat = activeCategory === 'all' || tool.cat === activeCategory;
+    const matchesSearch = tool.name.toLowerCase().includes(searchTerm) ||
+                           tool.desc.toLowerCase().includes(searchTerm) ||
+                           tool.cat.toLowerCase().includes(searchTerm);
+    return matchesCat && matchesSearch;
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '';
+    noResults.style.display = 'block';
+    return;
+  }
+  noResults.style.display = 'none';
+
+  grid.innerHTML = filtered.map(tool => `
+    <div
