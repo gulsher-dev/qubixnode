@@ -167,4 +167,65 @@ function renderTools() {
   noResults.style.display = 'none';
 
   grid.innerHTML = filtered.map(tool => `
-    <div
+    <div class="tool-card">
+      ${tool.isNew ? '<span class="tool-new-badge">🆕 New</span>' : ''}
+      <div class="tool-card-top">
+        <div class="tool-icon">${tool.name.charAt(0)}</div>
+        <div>
+          <h3>${tool.name}</h3>
+          <span class="tool-price-tag">${tool.price}</span>
+        </div>
+      </div>
+      <p class="tool-desc">${tool.desc}</p>
+      <div class="tool-card-bottom">
+        <span class="tool-rating">⭐ ${tool.rating}</span>
+        <span class="tool-cat-tag">${tool.cat}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+document.querySelectorAll('.dir-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.dir-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    activeCategory = tab.dataset.cat;
+    renderTools();
+  });
+});
+
+document.getElementById('toolSearch').addEventListener('input', (e) => {
+  searchTerm = e.target.value.toLowerCase();
+  renderTools();
+});
+
+// If arriving via ?cat=writing etc. from the nav menu, pre-select that category
+const urlParams = new URLSearchParams(window.location.search);
+const catParam = urlParams.get('cat');
+if (catParam) {
+  const matchingTab = document.querySelector(`.dir-tab[data-cat="${catParam}"]`);
+  if (matchingTab) matchingTab.click();
+}
+
+renderTools();
+</script>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="logo-dot"></span> QubixNode
+    </div>
+    <div class="footer-links">
+      <a href="tools.html">Tools</a>
+      <a href="compare.html">Compare</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="quiz.html">Quiz</a>
+    </div>
+  </div>
+  <p class="footer-bottom">© 2026 QubixNode. Artificial Intelligence & Networks.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
