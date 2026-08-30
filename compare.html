@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compare Any 2 — QubixNode</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== NAVBAR (Dynamic Island style) ===== -->
+<header class="nav-wrapper" id="navWrapper">
+  <div class="nav-pill" id="navPill">
+
+    <a href="index.html" class="nav-logo">
+      <span class="logo-dot"></span> QubixNode
+    </a>
+
+    <nav class="nav-links">
+      <div class="nav-item" data-menu="tools">
+        <span>TOOLS</span>
+        <svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </div>
+      <div class="nav-item" data-menu="compare">
+        <span>COMPARE</span>
+        <svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </div>
+      <div class="nav-item" data-menu="reviews">
+        <span>REVIEWS</span>
+        <svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </div>
+      <a href="quiz.html" class="nav-item">
+        <span>QUIZ</span>
+      </a>
+    </nav>
+
+    <a href="tools.html" class="nav-cta">EXPLORE TOOLS →</a>
+
+    <div class="nav-collapsed-label">
+      <span class="pulse-dot"></span> MENU
+    </div>
+
+  </div>
+
+  <!-- ===== MEGA MENU PANELS ===== -->
+  <div class="mega-menu" id="megaMenu">
+
+    <div class="mega-panel" data-panel="tools">
+      <div class="mega-head">
+        <span class="mega-eyebrow">TOOLS</span>
+        <h2>Find the right AI tool, fast</h2>
+        <p>Browse the directory by category, or search for exactly what you need.</p>
+      </div>
+      <div class="mega-cols">
+        <div class="mega-col">
+          <h4>BROWSE BY CATEGORY</h4>
+          <a href="tools.html?cat=writing">✍️ Writing & Content</a>
+          <a href="tools.html?cat=image">🎨 Image & Design</a>
+          <a href="tools.html?cat=code">💻 Code & Dev</a>
+          <a href="tools.html?cat=video">🎬 Video & Audio</a>
+          <a href="tools.html?cat=productivity">📊 Productivity</a>
+          <a href="tools.html?cat=chatbots">🤖 Chatbots</a>
+        </div>
+        <div class="mega-col highlight-card">
+          <span class="hc-tag">NEW DROP</span>
+          <div class="hc-number">15</div>
+          <span class="hc-label">DAYS BETWEEN NEW TOOLS</span>
+          <a href="tools.html" class="hc-link">See What's New →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mega-panel" data-panel="compare">
+      <div class="mega-head">
+        <span class="mega-eyebrow">COMPARE</span>
+        <h2>Compare any 2</h2>
+        <p>AI tools, laptops, phones, headphones — pick two and see them side by side.</p>
+      </div>
+      <div class="mega-cols">
+        <div class="mega-col">
+          <a href="compare.html">⚖️ Start a Comparison</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mega-panel" data-panel="reviews">
+      <div class="mega-head">
+        <span class="mega-eyebrow">REVIEWS</span>
+        <h2>What people are saying</h2>
+        <p>Real ratings and reviews for every tool in the directory.</p>
+      </div>
+      <div class="mega-cols">
+        <div class="mega-col">
+          <a href="reviews.html">⭐ Browse All Reviews</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</header>
+
+<!-- ===== COMPARE PAGE CONTENT ===== -->
+<main class="page-content">
+  <div class="page-hero">
+    <span class="section-eyebrow">COMPARE</span>
+    <h1>Compare any 2</h1>
+    <p>Pick a category, choose two items, and see them side by side.</p>
+  </div>
+
+  <div class="cmp-tabs" id="cmpTabs">
+    <div class="cmp-tab active" data-cat="aitools">🤖 AI Tools</div>
+    <div class="cmp-tab" data-cat="laptops">💻 Laptops</div>
+    <div class="cmp-tab" data-cat="phones">📱 Phones</div>
+    <div class="cmp-tab" data-cat="headphones">🎧 Headphones</div>
+  </div>
+
+  <div class="cmp-picker">
+    <select id="cmpSelectA" class="cmp-select"></select>
+    <span class="cmp-vs">VS</span>
+    <select id="cmpSelectB" class="cmp-select"></select>
+  </div>
+
+  <div class="cmp-result" id="cmpResult"></div>
+</main>
+
+<script>
+const AITOOLS_DATA = [
+  { name:"ChatGPT", price:"Free / $20/mo", bestFor:"General use, coding, brainstorming", freeTier:"Limited GPT-4 access", pros:"Versatile, huge plugin ecosystem", cons:"Can be verbose, occasional inaccuracies", rating:"4.5/5" },
+  { name:"Claude", price:"Free / $20/mo", bestFor:"Writing, long documents, analysis", freeTier:"Limited daily messages", pros:"Strong at long-context writing", cons:"No native image generation", rating:"4.6/5" },
+  { name:"Grammarly", price:"Free / $12/mo", bestFor:"Grammar, tone, and clarity", freeTier:"Basic grammar checks", pros:"Seamless browser integration", cons:"Advanced tone tools need Premium", rating:"4.4/5" },
+  { name:"Midjourney", price:"$10-60/mo (no free tier)", bestFor:"High-quality AI art", freeTier:"None", pros:"Best-in-class image quality", cons:"Discord-only interface, no free tier", rating:"4.7/5" },
+  { name:"GitHub Copilot", price:"$10/mo (free for students)", bestFor:"Code autocomplete in your editor", freeTier:"Free for verified students", pros:"Deep IDE integration", cons:"Subscription required for most users", rating:"4.5/5" },
+  { name:"Notion AI", price:"Add-on, ~$10/mo", bestFor:"Writing inside your Notion workspace", freeTier:"None (paid add-on)", pros:"Built into your existing workspace", cons:"Requires a Notion subscription too", rating:"4.3/5" },
+];
+
+const LAPTOPS_DATA = [
+  { name:"MacBook Air M3", price:"$1,099", processor:"Apple M3", ram:"8-24GB", battery:"Up to 18 hrs", weight:"1.24 kg", bestFor:"Everyday use, portability" },
+  { name:"Dell XPS 13", price:"$999", processor:"Intel Core Ultra 7", ram:"16-32GB", battery:"Up to 12 hrs", weight:"1.23 kg", bestFor:"Compact Windows productivity" },
+  { name:"ASUS ROG Zephyrus", price:"$1,799", processor:"AMD Ryzen 9 + RTX 4070", ram:"16-32GB", battery:"Up to 8 hrs", weight:"1.75 kg", bestFor:"Gaming and creative work" },
+  { name:"Lenovo ThinkPad X1", price:"$1,499", processor:"Intel Core Ultra 7", ram:"16-32GB", battery:"Up to 15 hrs", weight:"1.12 kg", bestFor:"Business, durability" },
+  { name:"HP Spectre x360", price:"$1,299", processor:"Intel Core Ultra 7", ram:"16-32GB", battery:"Up to 14 hrs", weight:"1.36 kg", bestFor:"2-in-1 flexibility" },
+];
+
+const PHONES_DATA = [
+  { name:"iPhone 16", price:"$799", display:"6.1\" OLED", camera:"48MP dual", battery:"Up to 22 hrs video", aiFeatures:"Apple Intelligence" },
+  { name:"Samsung Galaxy S26", price:"$849", display:"6.2\" AMOLED", camera:"50MP triple", battery:"Up to 24 hrs video", aiFeatures:"Galaxy AI" },
+  { name:"Google Pixel 10", price:"$699", display:"6.3\" OLED", camera:"50MP dual", battery:"Up to 24 hrs", aiFeatures:"Gemini built-in" },
+  { name:"OnePlus 13", price:"$799", display:"6.8\" AMOLED", camera:"50MP triple", battery:"Up to 26 hrs", aiFeatures:"AI editing suite" },
+  { name:"Xiaomi 15", price:"$649", display:"6.36\" AMOLED", camera:"50MP triple (Leica)", battery:"Up to 20 hrs", aiFeatures:"HyperAI features" },
+];
+
+const HEADPHONES_DATA = [
+  { name:"Sony WH-1000XM6", price:"$399", type:"Over-ear", noiseCancelling:"Industry-leading ANC", batteryLife:"Up to 30 hrs", bestFor:"Travel, commuting" },
+  { name:"Bose QuietComfort Ultra", price:"$429", type:"Over-ear", noiseCancelling:"Excellent ANC + spatial audio", batteryLife:"Up to 24 hrs", bestFor:"Comfort, immersive sound" },
+  { name:"Apple AirPods Max", price:"$549", type:"Over-ear", noiseCancelling:"Very good ANC", batteryLife:"Up to 20 hrs", bestFor:"Apple ecosystem users" },
+  { name:"Sennheiser Momentum 4", price:"$379", type:"Over-ear", noiseCancelling:"Strong adaptive ANC", batteryLife:"Up to 60 hrs", bestFor:"Longest battery life" },
+  { name:"JBL Tour One M3", price:"$299", type:"Over-ear", noiseCancelling:"Good adaptive ANC", batteryLife:"Up to 50 hrs", bestFor:"Budget-friendly ANC" },
+];
+
+const CATEGORY_CONFIG = {
+  aitools: {
+    data: AITOOLS_DATA,
+    fields: [
+      { key:"price", label:"Pricing" },
+      { key:"bestFor", label:"Best For" },
+      { key:"freeTier", label:"Free Tier" },
+      { key:"pros", label:"Pros" },
+      { key:"cons", label:"Cons" },
+      { key:"rating", label:"Rating" },
+    ]
+  },
+  laptops: {
+    data: LAPTOPS_DATA,
+    fields: [
+      { key:"price", label:"Price" },
+      { key:"processor", label:"Processor" },
+      { key:"ram", label:"RAM" },
+      { key:"battery", label:"Battery" },
+      { key:"weight", label:"Weight" },
+      { key:"bestFor", label:"Best For" },
+    ]
+  },
+  phones: {
+    data: PHONES_DATA,
+    fields: [
+      { key:"price", label:"Price" },
+      { key:"display", label:"Display" },
+      { key:"camera", label:"Camera" },
+      { key:"battery", label:"Battery" },
+      { key:"aiFeatures", label:"AI Features" },
+    ]
+  },
+  headphones: {
+    data: HEADPHONES_DATA,
+    fields: [
+      { key:"price", label:"Price" },
+      { key:"type", label:"Type" },
+      { key:"noiseCancelling", label:"Noise Cancelling" },
+      { key:"batteryLife", label:"Battery Life" },
+      { key:"bestFor", label:"Best For" },
+    ]
+  }
+};
+
+let activeCat = 'aitools';
+
+function populateSelects() {
+  const config = CATEGORY_CONFIG[activeCat];
+  const selectA = document.getElementById('cmpSelectA');
+  const selectB = document.getElementById('cmpSelectB');
+
+  const options = config.data.map((item, i) => `<option value="${i}">${item.name}</option>`).join('');
+  selectA.innerHTML = options;
+  selectB.innerHTML = options;
+  selectB.selectedIndex = Math.min(1, config.data.length - 1);
+
+  renderComparison();
+}
+
+function renderComparison() {
+  const config = CATEGORY_CONFIG[activeCat];
+  const itemA = config.data[document.getElementById('cmpSelectA').value];
+  const itemB = config.data[document.getElementById('cmpSelectB').value];
+  const result = document.getElementById('cmpResult');
+
+  if (itemA.name === itemB.name) {
+    result.innerHTML = '<div class="empty-state">Pick two different items to compare.</div>';
+    return;
+  }
+
+  result.innerHTML = `
+    <div class="cmp-table">
+      <div class="cmp-col cmp-col-head">
+        <div class="cmp-row cmp-row-title"></div>
+        ${config.fields.map(f => `<div class="cmp-row cmp-row-label">${f.label}</div>`).join('')}
+      </div>
+      <div class="cmp-col">
+        <div class="cmp-row cmp-row-title">${itemA.name}</div>
+        ${config.fields.map(f => `<div class="cmp-row">${itemA[f.key]}</div>`).join('')}
+      </div>
+      <div class="cmp-col">
+        <div class="cmp-row cmp-row-title">${itemB.name}</div>
+        ${config.fields.map(f => `<div class="cmp-row">${itemB[f.key]}</div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+document.querySelectorAll('.cmp-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.cmp-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    activeCat = tab.dataset.cat;
+    populateSelects();
+  });
+});
+
+document.getElementById('cmpSelectA').addEventListener('change', renderComparison);
+document.getElementById('cmpSelectB').addEventListener('change', renderComparison);
+
+populateSelects();
+</script>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="logo-dot"></span> QubixNode
+    </div>
+    <div class="footer-links">
+      <a href="tools.html">Tools</a>
+      <a href="compare.html">Compare</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="quiz.html">Quiz</a>
+    </div>
+  </div>
+  <p class="footer-bottom">© 2026 QubixNode. Artificial Intelligence & Networks.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
