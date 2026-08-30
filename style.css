@@ -492,3 +492,104 @@ a { text-decoration: none; color: inherit; }
 @media (max-width: 600px) {
   .dir-tabs { justify-content: flex-start; overflow-x: auto; padding-bottom: 6px; }
 }
+
+/* ===== COMPARE PAGE ===== */
+.cmp-tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 34px;
+}
+
+.cmp-tab {
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1px solid #1e293b;
+  background: var(--navy-light);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--slate);
+  transition: all 0.2s ease;
+}
+
+.cmp-tab:hover { border-color: var(--teal); color: var(--teal); }
+
+.cmp-tab.active {
+  background: var(--teal);
+  color: var(--navy);
+  border-color: var(--teal);
+}
+
+.cmp-picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.cmp-select {
+  padding: 14px 20px;
+  border-radius: 12px;
+  border: 1px solid #1e293b;
+  background: var(--navy-light);
+  color: var(--white);
+  font-size: 14px;
+  font-family: inherit;
+  min-width: 220px;
+}
+
+.cmp-select:focus { outline: none; border-color: var(--teal); }
+
+.cmp-vs {
+  font-weight: 800;
+  color: var(--teal);
+  font-size: 14px;
+}
+
+.cmp-table {
+  display: grid;
+  grid-template-columns: 140px 1fr 1fr;
+  background: var(--navy-light);
+  border: 1px solid #1e293b;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.cmp-col { display: flex; flex-direction: column; }
+
+.cmp-col:not(.cmp-col-head) {
+  border-left: 1px solid #1e293b;
+}
+
+.cmp-row {
+  padding: 16px 18px;
+  font-size: 13.5px;
+  border-bottom: 1px solid #1e293b;
+  color: #dbe2ec;
+  display: flex;
+  align-items: center;
+}
+
+.cmp-row:last-child { border-bottom: none; }
+
+.cmp-row-label {
+  color: var(--slate);
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.cmp-row-title {
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--teal);
+  background: rgba(45,212,191,0.06);
+}
+
+@media (max-width: 600px) {
+  .cmp-table { grid-template-columns: 100px 1fr 1fr; }
+  .cmp-row { padding: 12px 10px; font-size: 12px; }
+}
