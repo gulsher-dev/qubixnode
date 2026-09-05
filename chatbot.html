@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Chatbot — QubixNode</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== NAVBAR (Dynamic Island style) ===== -->
+<header class="nav-wrapper" id="navWrapper">
+  <div class="nav-pill" id="navPill">
+
+    <a href="index.html" class="nav-logo">
+      <span class="logo-dot"></span> QubixNode
+    </a>
+
+    <nav class="nav-links">
+      <div class="nav-item" data-menu="tools">
+        <span>TOOLS</span>
+        <svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </div>
+      <div class="nav-item" data-menu="compare">
+        <span>COMPARE</span>
+        <svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </div>
+      <div class="nav-item" data-menu="reviews">
+        <span>REVIEWS</span>
+        <svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+      </div>
+      <a href="chatbot.html" class="nav-item">
+        <span>CHATBOT</span>
+      </a>
+    </nav>
+
+    <a href="tools.html" class="nav-cta">EXPLORE TOOLS →</a>
+
+    <div class="nav-collapsed-label">
+      <span class="pulse-dot"></span> MENU
+    </div>
+
+  </div>
+
+  <!-- ===== MEGA MENU PANELS ===== -->
+  <div class="mega-menu" id="megaMenu">
+
+    <div class="mega-panel" data-panel="tools">
+      <div class="mega-head">
+        <span class="mega-eyebrow">TOOLS</span>
+        <h2>Find the right AI tool, fast</h2>
+        <p>Browse the directory by category, or search for exactly what you need.</p>
+      </div>
+      <div class="mega-cols">
+        <div class="mega-col">
+          <h4>BROWSE BY CATEGORY</h4>
+          <a href="tools.html?cat=writing">✍️ Writing & Content</a>
+          <a href="tools.html?cat=image">🎨 Image & Design</a>
+          <a href="tools.html?cat=code">💻 Code & Dev</a>
+          <a href="tools.html?cat=video">🎬 Video & Audio</a>
+          <a href="tools.html?cat=productivity">📊 Productivity</a>
+          <a href="tools.html?cat=chatbots">🤖 Chatbots</a>
+        </div>
+        <div class="mega-col highlight-card">
+          <span class="hc-tag">NEW DROP</span>
+          <div class="hc-number">15</div>
+          <span class="hc-label">DAYS BETWEEN NEW TOOLS</span>
+          <a href="tools.html" class="hc-link">See What's New →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mega-panel" data-panel="compare">
+      <div class="mega-head">
+        <span class="mega-eyebrow">COMPARE</span>
+        <h2>Compare any 2</h2>
+        <p>AI tools, laptops, phones, headphones — pick two and see them side by side.</p>
+      </div>
+      <div class="mega-cols">
+        <div class="mega-col">
+          <a href="compare.html">⚖️ Start a Comparison</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mega-panel" data-panel="reviews">
+      <div class="mega-head">
+        <span class="mega-eyebrow">REVIEWS</span>
+        <h2>What people are saying</h2>
+        <p>Real ratings and reviews for every tool in the directory.</p>
+      </div>
+      <div class="mega-cols">
+        <div class="mega-col">
+          <a href="reviews.html">⭐ Browse All Reviews</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</header>
+
+<!-- ===== CHATBOT PAGE CONTENT ===== -->
+<main class="chat-page">
+  <div class="chat-header">
+    <span class="section-eyebrow">AI CHATBOT</span>
+    <h1>Ask me anything</h1>
+  </div>
+
+  <div class="chat-window" id="chatWindow">
+    <div class="chat-msg chat-msg-ai">
+      <div class="chat-bubble">👋 Hi! I'm the QubixNode AI assistant. Ask me anything — about AI tools, tech, or whatever's on your mind.</div>
+    </div>
+  </div>
+
+  <div class="chat-input-row">
+    <input type="text" id="chatInput" class="chat-input" placeholder="Type your question..." autocomplete="off">
+    <button id="chatSendBtn" class="chat-send-btn">Send</button>
+  </div>
+</main>
+
+<script>
+const WORKER_URL = "https://qubixnode-chat.muhammadgulsher343.workers.dev/";
+
+const chatWindow = document.getElementById('chatWindow');
+const chatInput = document.getElementById('chatInput');
+const chatSendBtn = document.getElementById('chatSendBtn');
+
+function addMessage(text, sender) {
+  const msgDiv = document.createElement('div');
+  msgDiv.className = 'chat-msg ' + (sender === 'user' ? 'chat-msg-user' : 'chat-msg-ai');
+  const bubble = document.createElement('div');
+  bubble.className = 'chat-bubble';
+  bubble.textContent = text;
+  msgDiv.appendChild(bubble);
+  chatWindow.appendChild(msgDiv);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+  return bubble;
+}
+
+function addTypingIndicator() {
+  const msgDiv = document.createElement('div');
+  msgDiv.className = 'chat-msg chat-msg-ai';
+  msgDiv.id = 'typingIndicator';
+  msgDiv.innerHTML = '<div class="chat-bubble chat-typing"><span></span><span></span><span></span></div>';
+  chatWindow.appendChild(msgDiv);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+function removeTypingIndicator() {
+  const el = document.getElementById('typingIndicator');
+  if (el) el.remove();
+}
+
+async function sendMessage() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+
+  addMessage(text, 'user');
+  chatInput.value = '';
+  chatSendBtn.disabled = true;
+  addTypingIndicator();
+
+  try {
+    const response = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text })
+    });
+    const data = await response.json();
+    removeTypingIndicator();
+    addMessage(data.reply || "Sorry, I didn't get a response. Try again.", 'ai');
+  } catch (err) {
+    removeTypingIndicator();
+    addMessage("Something went wrong connecting to the AI. Please try again.", 'ai');
+  }
+
+  chatSendBtn.disabled = false;
+  chatInput.focus();
+}
+
+chatSendBtn.addEventListener('click', sendMessage);
+chatInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') sendMessage();
+});
+</script>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="logo-dot"></span> QubixNode
+    </div>
+    <div class="footer-links">
+      <a href="tools.html">Tools</a>
+      <a href="compare.html">Compare</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="chatbot.html">Chatbot</a>
+    </div>
+  </div>
+  <p class="footer-bottom">© 2026 QubixNode. Artificial Intelligence & Networks.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
