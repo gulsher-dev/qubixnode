@@ -29,8 +29,8 @@
         <span>REVIEWS</span>
         <svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
       </div>
-      <a href="quiz.html" class="nav-item">
-        <span>QUIZ</span>
+      <a href="chatbot.html" class="nav-item">
+        <span>CHATBOT</span>
       </a>
     </nav>
 
@@ -115,9 +115,15 @@
   </div>
 
   <div class="cmp-picker">
-    <select id="cmpSelectA" class="cmp-select"></select>
+    <div class="cmp-search-wrap">
+      <input type="text" id="cmpSearchA" class="cmp-search" placeholder="Search..." autocomplete="off">
+      <div class="cmp-suggestions" id="cmpSuggestionsA"></div>
+    </div>
     <span class="cmp-vs">VS</span>
-    <select id="cmpSelectB" class="cmp-select"></select>
+    <div class="cmp-search-wrap">
+      <input type="text" id="cmpSearchB" class="cmp-search" placeholder="Search..." autocomplete="off">
+      <div class="cmp-suggestions" id="cmpSuggestionsB"></div>
+    </div>
   </div>
 
   <div class="cmp-result" id="cmpResult"></div>
@@ -125,36 +131,139 @@
 
 <script>
 const AITOOLS_DATA = [
-  { name:"ChatGPT", price:"Free / $20/mo", bestFor:"General use, coding, brainstorming", freeTier:"Limited GPT-4 access", pros:"Versatile, huge plugin ecosystem", cons:"Can be verbose, occasional inaccuracies", rating:"4.5/5" },
-  { name:"Claude", price:"Free / $20/mo", bestFor:"Writing, long documents, analysis", freeTier:"Limited daily messages", pros:"Strong at long-context writing", cons:"No native image generation", rating:"4.6/5" },
-  { name:"Grammarly", price:"Free / $12/mo", bestFor:"Grammar, tone, and clarity", freeTier:"Basic grammar checks", pros:"Seamless browser integration", cons:"Advanced tone tools need Premium", rating:"4.4/5" },
-  { name:"Midjourney", price:"$10-60/mo (no free tier)", bestFor:"High-quality AI art", freeTier:"None", pros:"Best-in-class image quality", cons:"Discord-only interface, no free tier", rating:"4.7/5" },
-  { name:"GitHub Copilot", price:"$10/mo (free for students)", bestFor:"Code autocomplete in your editor", freeTier:"Free for verified students", pros:"Deep IDE integration", cons:"Subscription required for most users", rating:"4.5/5" },
-  { name:"Notion AI", price:"Add-on, ~$10/mo", bestFor:"Writing inside your Notion workspace", freeTier:"None (paid add-on)", pros:"Built into your existing workspace", cons:"Requires a Notion subscription too", rating:"4.3/5" },
+  { name:"ChatGPT", price:"Free / $20/mo", bestFor:"General use, coding, brainstorming", freeTier:"Limited GPT-4 access", pros:"Versatile, huge plugin ecosystem", cons:"Can be verbose, occasional inaccuracies", rating:"4.5/5", score:90 },
+  { name:"Claude", price:"Free / $20/mo", bestFor:"Writing, long documents, analysis", freeTier:"Limited daily messages", pros:"Strong at long-context writing", cons:"No native image generation", rating:"4.6/5", score:92 },
+  { name:"Grammarly", price:"Free / $12/mo", bestFor:"Grammar, tone, and clarity", freeTier:"Basic grammar checks", pros:"Seamless browser integration", cons:"Advanced tone tools need Premium", rating:"4.4/5", score:88 },
+  { name:"Copy.ai", price:"Free / $49/mo", bestFor:"Marketing copy and outlines", freeTier:"2,000 words/mo", pros:"Fast templates for common formats", cons:"Output often needs heavy editing", rating:"4.1/5", score:82 },
+  { name:"Jasper", price:"$49-125/mo", bestFor:"Marketing teams at scale", freeTier:"None (7-day trial)", pros:"Built for team workflows", cons:"Pricey for individuals", rating:"4.2/5", score:84 },
+  { name:"Midjourney", price:"$10-60/mo (no free tier)", bestFor:"High-quality AI art", freeTier:"None", pros:"Best-in-class image quality", cons:"Discord-only interface, no free tier", rating:"4.7/5", score:94 },
+  { name:"DALL-E", price:"Free (in ChatGPT) / usage-based API", bestFor:"Quick visuals inside ChatGPT", freeTier:"Limited generations", pros:"Built into ChatGPT already", cons:"Less control than Midjourney", rating:"4.3/5", score:86 },
+  { name:"Canva AI", price:"Free / $13/mo", bestFor:"Design + AI in one tool", freeTier:"Generous free tier", pros:"Huge template library", cons:"AI features feel secondary to design", rating:"4.5/5", score:90 },
+  { name:"GitHub Copilot", price:"$10/mo (free for students)", bestFor:"Code autocomplete in your editor", freeTier:"Free for verified students", pros:"Deep IDE integration", cons:"Subscription required for most users", rating:"4.5/5", score:90 },
+  { name:"Cursor", price:"Free / $20/mo", bestFor:"Chat-driven code editing", freeTier:"Limited fast requests", pros:"Feels like pairing with an AI dev", cons:"Can be slower on huge codebases", rating:"4.6/5", score:92 },
+  { name:"Runway", price:"Free / $12-76/mo", bestFor:"AI video generation & editing", freeTier:"Limited credits", pros:"Fast-moving, powerful video tools", cons:"Credits burn quickly", rating:"4.3/5", score:86 },
+  { name:"ElevenLabs", price:"Free / $5-330/mo", bestFor:"Realistic voice generation", freeTier:"10,000 characters/mo", pros:"Extremely natural voices", cons:"Costs scale fast with usage", rating:"4.6/5", score:92 },
+  { name:"Notion AI", price:"Add-on, ~$10/mo", bestFor:"Writing inside your workspace", freeTier:"None (paid add-on)", pros:"Built into existing workspace", cons:"Requires Notion subscription too", rating:"4.3/5", score:86 },
+  { name:"Otter.ai", price:"Free / $17/mo", bestFor:"Meeting notes & transcription", freeTier:"300 min/mo", pros:"Syncs with calendar automatically", cons:"Accuracy dips with heavy accents", rating:"4.2/5", score:84 },
+  { name:"Perplexity", price:"Free / $20/mo", bestFor:"AI search with cited sources", freeTier:"Generous free tier", pros:"Answers include real citations", cons:"Less creative than a chatbot", rating:"4.5/5", score:90 },
 ];
 
 const LAPTOPS_DATA = [
-  { name:"MacBook Air M3", price:"$1,099", processor:"Apple M3", ram:"8-24GB", battery:"Up to 18 hrs", weight:"1.24 kg", bestFor:"Everyday use, portability" },
-  { name:"Dell XPS 13", price:"$999", processor:"Intel Core Ultra 7", ram:"16-32GB", battery:"Up to 12 hrs", weight:"1.23 kg", bestFor:"Compact Windows productivity" },
-  { name:"ASUS ROG Zephyrus", price:"$1,799", processor:"AMD Ryzen 9 + RTX 4070", ram:"16-32GB", battery:"Up to 8 hrs", weight:"1.75 kg", bestFor:"Gaming and creative work" },
-  { name:"Lenovo ThinkPad X1", price:"$1,499", processor:"Intel Core Ultra 7", ram:"16-32GB", battery:"Up to 15 hrs", weight:"1.12 kg", bestFor:"Business, durability" },
-  { name:"HP Spectre x360", price:"$1,299", processor:"Intel Core Ultra 7", ram:"16-32GB", battery:"Up to 14 hrs", weight:"1.36 kg", bestFor:"2-in-1 flexibility" },
+  { name:"MacBook Air 13\" M3", price:"$1,099", processor:"Apple M3", ram:"8-24GB", battery:"Up to 18 hrs", weight:"1.24 kg", bestFor:"Everyday use, portability", score:92 },
+  { name:"MacBook Air 15\" M3", price:"$1,299", processor:"Apple M3", ram:"8-24GB", battery:"Up to 18 hrs", weight:"1.51 kg", bestFor:"Bigger screen, still light", score:92 },
+  { name:"MacBook Air 13\" M2", price:"$999", processor:"Apple M2", ram:"8-24GB", battery:"Up to 18 hrs", weight:"1.24 kg", bestFor:"Budget Apple pick", score:87 },
+  { name:"MacBook Pro 14\" M4", price:"$1,599", processor:"Apple M4", ram:"16-32GB", battery:"Up to 18 hrs", weight:"1.55 kg", bestFor:"Compact pro performance", score:94 },
+  { name:"MacBook Pro 16\" M4 Pro", price:"$2,499", processor:"Apple M4 Pro", ram:"18-48GB", battery:"Up to 22 hrs", weight:"2.14 kg", bestFor:"Professional creative work", score:97 },
+  { name:"MacBook Pro 16\" M4 Max", price:"$3,499", processor:"Apple M4 Max", ram:"36-128GB", battery:"Up to 21 hrs", weight:"2.15 kg", bestFor:"Top-tier video/3D work", score:99 },
+  { name:"Dell XPS 13", price:"$999", processor:"Intel Core Ultra 7", ram:"16-32GB", battery:"Up to 12 hrs", weight:"1.23 kg", bestFor:"Compact Windows productivity", score:85 },
+  { name:"Dell XPS 14", price:"$1,399", processor:"Intel Core Ultra 7", ram:"16-64GB", battery:"Up to 13 hrs", weight:"1.55 kg", bestFor:"Balanced power and portability", score:87 },
+  { name:"Dell XPS 15", price:"$1,599", processor:"Intel Core Ultra 7", ram:"16-64GB", battery:"Up to 13 hrs", weight:"1.86 kg", bestFor:"Windows creative work", score:88 },
+  { name:"Dell Inspiron 15", price:"$649", processor:"Intel Core i5", ram:"8-16GB", battery:"Up to 8 hrs", weight:"1.65 kg", bestFor:"Budget everyday use", score:70 },
+  { name:"Dell Latitude 7440", price:"$1,499", processor:"Intel Core Ultra 7", ram:"16-32GB", battery:"Up to 14 hrs", weight:"1.36 kg", bestFor:"Business, security features", score:86 },
+  { name:"Alienware m16 R2", price:"$1,999", processor:"Intel Core i9 + RTX 4070", ram:"16-32GB", battery:"Up to 6 hrs", weight:"2.7 kg", bestFor:"High-end gaming", score:90 },
+  { name:"HP Spectre x360 14", price:"$1,299", processor:"Intel Core Ultra 7", ram:"16-32GB", battery:"Up to 14 hrs", weight:"1.36 kg", bestFor:"2-in-1 flexibility", score:84 },
+  { name:"HP Envy x360 15", price:"$899", processor:"AMD Ryzen 7", ram:"16GB", battery:"Up to 12 hrs", weight:"1.75 kg", bestFor:"Mid-range 2-in-1", score:79 },
+  { name:"HP Omen 16", price:"$1,349", processor:"Intel Core i7 + RTX 4060", ram:"16-32GB", battery:"Up to 8 hrs", weight:"2.5 kg", bestFor:"Mid-range gaming", score:83 },
+  { name:"HP Omen Transcend 14", price:"$1,799", processor:"Intel Core Ultra 7 + RTX 4070", ram:"32GB", battery:"Up to 10 hrs", weight:"1.65 kg", bestFor:"Thin-and-light gaming", score:88 },
+  { name:"HP Pavilion 15", price:"$549", processor:"Intel Core i5", ram:"8-16GB", battery:"Up to 10 hrs", weight:"1.75 kg", bestFor:"Budget everyday laptop", score:68 },
+  { name:"HP EliteBook 840", price:"$1,449", processor:"Intel Core Ultra 7", ram:"16-32GB", battery:"Up to 13 hrs", weight:"1.36 kg", bestFor:"Enterprise business use", score:85 },
+  { name:"Lenovo ThinkPad X1 Carbon Gen 12", price:"$1,499", processor:"Intel Core Ultra 7", ram:"16-32GB", battery:"Up to 15 hrs", weight:"1.12 kg", bestFor:"Business, durability", score:90 },
+  { name:"Lenovo ThinkPad X1 Yoga", price:"$1,699", processor:"Intel Core Ultra 7", ram:"16-32GB", battery:"Up to 13 hrs", weight:"1.4 kg", bestFor:"Business 2-in-1", score:87 },
+  { name:"Lenovo Legion 5 Pro", price:"$1,399", processor:"AMD Ryzen 7 + RTX 4060", ram:"16-32GB", battery:"Up to 7 hrs", weight:"2.4 kg", bestFor:"Gaming on a budget", score:85 },
+  { name:"Lenovo Legion Slim 7", price:"$1,799", processor:"AMD Ryzen 9 + RTX 4070", ram:"32GB", battery:"Up to 8 hrs", weight:"2.1 kg", bestFor:"Thin gaming/creator", score:89 },
+  { name:"Lenovo IdeaPad Slim 5", price:"$699", processor:"AMD Ryzen 5", ram:"8-16GB", battery:"Up to 12 hrs", weight:"1.5 kg", bestFor:"Budget everyday laptop", score:73 },
+  { name:"Lenovo Yoga 9i", price:"$1,399", processor:"Intel Core Ultra 7", ram:"16-32GB", battery:"Up to 14 hrs", weight:"1.4 kg", bestFor:"Premium 2-in-1", score:86 },
+  { name:"ASUS ROG Zephyrus G14", price:"$1,799", processor:"AMD Ryzen 9 + RTX 4070", ram:"16-32GB", battery:"Up to 10 hrs", weight:"1.65 kg", bestFor:"Gaming and creative work", score:89 },
+  { name:"ASUS ROG Strix G16", price:"$1,499", processor:"Intel Core i7 + RTX 4060", ram:"16-32GB", battery:"Up to 7 hrs", weight:"2.5 kg", bestFor:"Mid-range gaming", score:84 },
+  { name:"ASUS Zenbook 14 OLED", price:"$899", processor:"Intel Core Ultra 5", ram:"16GB", battery:"Up to 14 hrs", weight:"1.2 kg", bestFor:"Budget-friendly productivity", score:80 },
+  { name:"ASUS Zenbook Pro 16X", price:"$1,999", processor:"Intel Core i9 + RTX 4060", ram:"32-64GB", battery:"Up to 8 hrs", weight:"2.4 kg", bestFor:"Creator workstation", score:89 },
+  { name:"ASUS Vivobook S15", price:"$799", processor:"Intel Core Ultra 5", ram:"16GB", battery:"Up to 13 hrs", weight:"1.4 kg", bestFor:"Everyday value laptop", score:77 },
+  { name:"ASUS TUF Gaming A15", price:"$999", processor:"AMD Ryzen 7 + RTX 4050", ram:"16GB", battery:"Up to 7 hrs", weight:"2.2 kg", bestFor:"Budget gaming", score:78 },
+  { name:"Acer Swift Go 14", price:"$749", processor:"Intel Core Ultra 5", ram:"16GB", battery:"Up to 10 hrs", weight:"1.32 kg", bestFor:"Budget everyday laptop", score:76 },
+  { name:"Acer Aspire 5", price:"$499", processor:"Intel Core i5", ram:"8-16GB", battery:"Up to 9 hrs", weight:"1.7 kg", bestFor:"Cheapest everyday option", score:65 },
+  { name:"Acer Predator Helios Neo 16", price:"$1,399", processor:"Intel Core i7 + RTX 4060", ram:"16-32GB", battery:"Up to 7 hrs", weight:"2.6 kg", bestFor:"Mid-range gaming", score:83 },
+  { name:"Acer Nitro 5", price:"$799", processor:"Intel Core i5 + RTX 4050", ram:"16GB", battery:"Up to 6 hrs", weight:"2.5 kg", bestFor:"Budget gaming", score:76 },
+  { name:"MSI Stealth 16", price:"$1,899", processor:"Intel Core i9 + RTX 4070", ram:"32GB", battery:"Up to 8 hrs", weight:"2.1 kg", bestFor:"High-end gaming/creator", score:88 },
+  { name:"MSI Raider GE78", price:"$2,799", processor:"Intel Core i9 + RTX 4090", ram:"32-64GB", battery:"Up to 6 hrs", weight:"3.1 kg", bestFor:"Maximum gaming performance", score:93 },
+  { name:"MSI Prestige 16", price:"$1,299", processor:"Intel Core Ultra 7", ram:"16-32GB", battery:"Up to 10 hrs", weight:"1.8 kg", bestFor:"Business/creator hybrid", score:83 },
+  { name:"MSI Cyborg 15", price:"$999", processor:"Intel Core i7 + RTX 4050", ram:"16GB", battery:"Up to 7 hrs", weight:"1.9 kg", bestFor:"Budget gaming", score:79 },
+  { name:"Microsoft Surface Laptop 6", price:"$1,199", processor:"Intel Core Ultra 7", ram:"16-32GB", battery:"Up to 19 hrs", weight:"1.34 kg", bestFor:"Windows all-rounder", score:86 },
+  { name:"Microsoft Surface Laptop Studio 2", price:"$2,099", processor:"Intel Core i7 + RTX 4060", ram:"16-64GB", battery:"Up to 19 hrs", weight:"1.96 kg", bestFor:"Creative 2-in-1 workstation", score:89 },
+  { name:"Microsoft Surface Pro 11", price:"$999", processor:"Snapdragon X Elite", ram:"16-32GB", battery:"Up to 14 hrs", weight:"0.89 kg", bestFor:"Tablet/laptop hybrid", score:82 },
+  { name:"Razer Blade 14", price:"$2,199", processor:"AMD Ryzen 9 + RTX 4070", ram:"32GB", battery:"Up to 10 hrs", weight:"1.84 kg", bestFor:"Premium compact gaming", score:89 },
+  { name:"Razer Blade 16", price:"$2,999", processor:"Intel Core i9 + RTX 4080", ram:"32-64GB", battery:"Up to 9 hrs", weight:"2.45 kg", bestFor:"Premium large-screen gaming", score:92 },
+  { name:"LG Gram 17", price:"$1,699", processor:"Intel Core Ultra 7", ram:"16-32GB", battery:"Up to 20 hrs", weight:"1.35 kg", bestFor:"Big screen, ultra-light", score:85 },
+  { name:"LG Gram Pro 16", price:"$1,899", processor:"Intel Core Ultra 7", ram:"16-32GB", battery:"Up to 18 hrs", weight:"1.39 kg", bestFor:"Lightweight pro work", score:86 },
+  { name:"Samsung Galaxy Book4 Pro", price:"$1,449", processor:"Intel Core Ultra 7", ram:"16-32GB", battery:"Up to 21 hrs", weight:"1.17 kg", bestFor:"AMOLED display, light travel", score:87 },
+  { name:"Samsung Galaxy Book4 Ultra", price:"$2,199", processor:"Intel Core i9 + RTX 4070", ram:"32-64GB", battery:"Up to 16 hrs", weight:"1.63 kg", bestFor:"Premium creator laptop", score:91 },
+  { name:"Framework Laptop 13", price:"$1,049", processor:"Intel Core Ultra 5/7", ram:"8-64GB", battery:"Up to 12 hrs", weight:"1.3 kg", bestFor:"Repairable, upgradeable design", score:83 },
 ];
 
 const PHONES_DATA = [
-  { name:"iPhone 16", price:"$799", display:"6.1\" OLED", camera:"48MP dual", battery:"Up to 22 hrs video", aiFeatures:"Apple Intelligence" },
-  { name:"Samsung Galaxy S26", price:"$849", display:"6.2\" AMOLED", camera:"50MP triple", battery:"Up to 24 hrs video", aiFeatures:"Galaxy AI" },
-  { name:"Google Pixel 10", price:"$699", display:"6.3\" OLED", camera:"50MP dual", battery:"Up to 24 hrs", aiFeatures:"Gemini built-in" },
-  { name:"OnePlus 13", price:"$799", display:"6.8\" AMOLED", camera:"50MP triple", battery:"Up to 26 hrs", aiFeatures:"AI editing suite" },
-  { name:"Xiaomi 15", price:"$649", display:"6.36\" AMOLED", camera:"50MP triple (Leica)", battery:"Up to 20 hrs", aiFeatures:"HyperAI features" },
+  { name:"iPhone 16", price:"$799", display:"6.1\" OLED", camera:"48MP dual", battery:"Up to 22 hrs video", aiFeatures:"Apple Intelligence", score:90 },
+  { name:"iPhone 16 Plus", price:"$899", display:"6.7\" OLED", camera:"48MP dual", battery:"Up to 27 hrs video", aiFeatures:"Apple Intelligence", score:91 },
+  { name:"iPhone 16 Pro", price:"$999", display:"6.3\" OLED ProMotion", camera:"48MP triple", battery:"Up to 27 hrs video", aiFeatures:"Apple Intelligence", score:95 },
+  { name:"iPhone 16 Pro Max", price:"$1,199", display:"6.9\" OLED ProMotion", camera:"48MP triple", battery:"Up to 33 hrs video", aiFeatures:"Apple Intelligence", score:96 },
+  { name:"iPhone SE 4", price:"$499", display:"6.1\" OLED", camera:"48MP single", battery:"Up to 20 hrs video", aiFeatures:"Basic Apple Intelligence", score:78 },
+  { name:"iPhone 15", price:"$699", display:"6.1\" OLED", camera:"48MP dual", battery:"Up to 20 hrs video", aiFeatures:"Limited", score:85 },
+  { name:"Samsung Galaxy S26", price:"$849", display:"6.2\" AMOLED", camera:"50MP triple", battery:"Up to 24 hrs video", aiFeatures:"Galaxy AI", score:91 },
+  { name:"Samsung Galaxy S26+", price:"$1,049", display:"6.7\" AMOLED", camera:"50MP triple", battery:"Up to 27 hrs video", aiFeatures:"Galaxy AI", score:93 },
+  { name:"Samsung Galaxy S26 Ultra", price:"$1,299", display:"6.9\" AMOLED", camera:"200MP quad", battery:"Up to 30 hrs video", aiFeatures:"Galaxy AI + S Pen", score:96 },
+  { name:"Samsung Galaxy A56", price:"$449", display:"6.5\" AMOLED", camera:"50MP triple", battery:"Up to 20 hrs video", aiFeatures:"Basic Galaxy AI", score:76 },
+  { name:"Samsung Galaxy A36", price:"$349", display:"6.4\" AMOLED", camera:"50MP triple", battery:"Up to 19 hrs video", aiFeatures:"Basic Galaxy AI", score:71 },
+  { name:"Samsung Galaxy Z Fold 6", price:"$1,899", display:"7.6\" foldable AMOLED", camera:"50MP triple", battery:"Up to 20 hrs video", aiFeatures:"Galaxy AI, multitasking", score:92 },
+  { name:"Samsung Galaxy Z Flip 6", price:"$1,099", display:"6.7\" foldable AMOLED", camera:"50MP dual", battery:"Up to 19 hrs video", aiFeatures:"Galaxy AI", score:87 },
+  { name:"Google Pixel 10", price:"$699", display:"6.3\" OLED", camera:"50MP dual", battery:"Up to 24 hrs", aiFeatures:"Gemini built-in", score:89 },
+  { name:"Google Pixel 10 Pro", price:"$999", display:"6.7\" OLED", camera:"50MP triple", battery:"Up to 27 hrs", aiFeatures:"Gemini + advanced photo AI", score:93 },
+  { name:"Google Pixel 10 Pro XL", price:"$1,099", display:"6.9\" OLED", camera:"50MP triple", battery:"Up to 30 hrs", aiFeatures:"Gemini + advanced photo AI", score:94 },
+  { name:"Google Pixel 9a", price:"$499", display:"6.1\" OLED", camera:"48MP dual", battery:"Up to 24 hrs", aiFeatures:"Gemini (limited)", score:80 },
+  { name:"OnePlus 13", price:"$799", display:"6.8\" AMOLED", camera:"50MP triple", battery:"Up to 26 hrs", aiFeatures:"AI editing suite", score:88 },
+  { name:"OnePlus 13R", price:"$599", display:"6.7\" AMOLED", camera:"50MP dual", battery:"Up to 24 hrs", aiFeatures:"AI editing suite (limited)", score:81 },
+  { name:"OnePlus Open", price:"$1,499", display:"7.8\" foldable AMOLED", camera:"48MP triple", battery:"Up to 20 hrs", aiFeatures:"AI editing suite", score:90 },
+  { name:"OnePlus Nord 4", price:"$449", display:"6.7\" AMOLED", camera:"50MP single", battery:"Up to 22 hrs", aiFeatures:"Basic AI tools", score:74 },
+  { name:"Xiaomi 15", price:"$649", display:"6.36\" AMOLED", camera:"50MP triple (Leica)", battery:"Up to 20 hrs", aiFeatures:"HyperAI features", score:86 },
+  { name:"Xiaomi 15 Ultra", price:"$1,299", display:"6.73\" AMOLED", camera:"50MP quad (Leica)", battery:"Up to 22 hrs", aiFeatures:"HyperAI features", score:95 },
+  { name:"Xiaomi Redmi Note 14", price:"$249", display:"6.67\" AMOLED", camera:"108MP dual", battery:"Up to 22 hrs", aiFeatures:"Basic AI tools", score:70 },
+  { name:"Xiaomi Redmi Note 14 Pro", price:"$349", display:"6.67\" AMOLED", camera:"200MP triple", battery:"Up to 22 hrs", aiFeatures:"Basic AI tools", score:76 },
+  { name:"POCO X7 Pro", price:"$299", display:"6.67\" AMOLED", camera:"50MP dual", battery:"Up to 20 hrs", aiFeatures:"Basic AI tools", score:73 },
+  { name:"Nothing Phone 3", price:"$599", display:"6.5\" OLED", camera:"50MP triple", battery:"Up to 22 hrs", aiFeatures:"Essential Space AI", score:81 },
+  { name:"Nothing Phone 3a", price:"$379", display:"6.7\" AMOLED", camera:"50MP triple", battery:"Up to 24 hrs", aiFeatures:"Essential Space AI (limited)", score:75 },
+  { name:"Motorola Edge 60", price:"$399", display:"6.67\" pOLED", camera:"50MP dual", battery:"Up to 20 hrs", aiFeatures:"Moto AI", score:77 },
+  { name:"Motorola Edge 60 Pro", price:"$599", display:"6.7\" pOLED", camera:"50MP triple", battery:"Up to 22 hrs", aiFeatures:"Moto AI", score:83 },
+  { name:"Motorola Moto G85", price:"$249", display:"6.67\" pOLED", camera:"50MP dual", battery:"Up to 20 hrs", aiFeatures:"Basic Moto AI", score:68 },
+  { name:"Motorola Razr 60", price:"$699", display:"6.9\" foldable pOLED", camera:"50MP dual", battery:"Up to 18 hrs", aiFeatures:"Moto AI", score:82 },
+  { name:"Asus ROG Phone 9", price:"$999", display:"6.78\" AMOLED 165Hz", camera:"50MP triple", battery:"Up to 28 hrs", aiFeatures:"Gaming-focused AI tuning", score:87 },
+  { name:"Asus ROG Phone 9 Pro", price:"$1,199", display:"6.78\" AMOLED 185Hz", camera:"50MP triple", battery:"Up to 30 hrs", aiFeatures:"Gaming-focused AI tuning", score:89 },
+  { name:"Sony Xperia 1 VII", price:"$1,399", display:"6.5\" 4K OLED", camera:"48MP triple", battery:"Up to 20 hrs", aiFeatures:"Limited AI features", score:85 },
+  { name:"Sony Xperia 10 VI", price:"$549", display:"6.1\" OLED", camera:"48MP dual", battery:"Up to 18 hrs", aiFeatures:"Limited AI features", score:73 },
+  { name:"Honor Magic 7 Pro", price:"$899", display:"6.8\" OLED", camera:"50MP triple", battery:"Up to 24 hrs", aiFeatures:"Magic AI", score:88 },
+  { name:"Honor 200", price:"$449", display:"6.7\" OLED", camera:"50MP triple", battery:"Up to 20 hrs", aiFeatures:"Basic Magic AI", score:76 },
+  { name:"Oppo Find X8", price:"$799", display:"6.59\" AMOLED", camera:"50MP triple", battery:"Up to 24 hrs", aiFeatures:"AI photography suite", score:87 },
+  { name:"Oppo Find X8 Pro", price:"$1,099", display:"6.78\" AMOLED", camera:"50MP triple (Hasselblad)", battery:"Up to 26 hrs", aiFeatures:"AI photography suite", score:92 },
+  { name:"Oppo Reno 13", price:"$449", display:"6.7\" AMOLED", camera:"50MP dual", battery:"Up to 20 hrs", aiFeatures:"Basic AI features", score:75 },
+  { name:"Vivo X200 Pro", price:"$999", display:"6.78\" AMOLED", camera:"50MP triple (Zeiss)", battery:"Up to 26 hrs", aiFeatures:"AI photography suite", score:91 },
+  { name:"Vivo V40", price:"$499", display:"6.78\" AMOLED", camera:"50MP dual", battery:"Up to 21 hrs", aiFeatures:"Basic AI features", score:77 },
+  { name:"Realme GT 7 Pro", price:"$649", display:"6.78\" AMOLED", camera:"50MP triple", battery:"Up to 24 hrs", aiFeatures:"Basic AI tools", score:84 },
+  { name:"Realme 13 Pro", price:"$329", display:"6.7\" AMOLED", camera:"50MP dual", battery:"Up to 20 hrs", aiFeatures:"Basic AI tools", score:72 },
+  { name:"Huawei Pura 70 Ultra", price:"$1,299", display:"6.8\" OLED", camera:"50MP triple", battery:"Up to 22 hrs", aiFeatures:"Harmony AI features", score:90 },
+  { name:"Huawei Mate 70 Pro", price:"$1,099", display:"6.71\" OLED", camera:"50MP triple", battery:"Up to 24 hrs", aiFeatures:"Harmony AI features", score:89 },
 ];
 
 const HEADPHONES_DATA = [
-  { name:"Sony WH-1000XM6", price:"$399", type:"Over-ear", noiseCancelling:"Industry-leading ANC", batteryLife:"Up to 30 hrs", bestFor:"Travel, commuting" },
-  { name:"Bose QuietComfort Ultra", price:"$429", type:"Over-ear", noiseCancelling:"Excellent ANC + spatial audio", batteryLife:"Up to 24 hrs", bestFor:"Comfort, immersive sound" },
-  { name:"Apple AirPods Max", price:"$549", type:"Over-ear", noiseCancelling:"Very good ANC", batteryLife:"Up to 20 hrs", bestFor:"Apple ecosystem users" },
-  { name:"Sennheiser Momentum 4", price:"$379", type:"Over-ear", noiseCancelling:"Strong adaptive ANC", batteryLife:"Up to 60 hrs", bestFor:"Longest battery life" },
-  { name:"JBL Tour One M3", price:"$299", type:"Over-ear", noiseCancelling:"Good adaptive ANC", batteryLife:"Up to 50 hrs", bestFor:"Budget-friendly ANC" },
+  { name:"Sony WH-1000XM6", price:"$399", type:"Over-ear", noiseCancelling:"Industry-leading ANC", batteryLife:"Up to 30 hrs", bestFor:"Travel, commuting", score:96 },
+  { name:"Sony WH-1000XM5", price:"$329", type:"Over-ear", noiseCancelling:"Excellent ANC", batteryLife:"Up to 30 hrs", bestFor:"Value alternative to XM6", score:92 },
+  { name:"Bose QuietComfort Ultra", price:"$429", type:"Over-ear", noiseCancelling:"Excellent ANC + spatial audio", batteryLife:"Up to 24 hrs", bestFor:"Comfort, immersive sound", score:94 },
+  { name:"Bose QuietComfort SE", price:"$249", type:"Over-ear", noiseCancelling:"Very good ANC", batteryLife:"Up to 24 hrs", bestFor:"Budget Bose comfort", score:85 },
+  { name:"Apple AirPods Max", price:"$549", type:"Over-ear", noiseCancelling:"Very good ANC", batteryLife:"Up to 20 hrs", bestFor:"Apple ecosystem users", score:88 },
+  { name:"Apple AirPods Pro 3", price:"$249", type:"In-ear", noiseCancelling:"Very good ANC", batteryLife:"Up to 6 hrs (30 with case)", bestFor:"Compact Apple ecosystem pick", score:90 },
+  { name:"Sennheiser Momentum 4", price:"$379", type:"Over-ear", noiseCancelling:"Strong adaptive ANC", batteryLife:"Up to 60 hrs", bestFor:"Longest battery life", score:91 },
+  { name:"Sennheiser Accentum", price:"$179", type:"Over-ear", noiseCancelling:"Good ANC", batteryLife:"Up to 50 hrs", bestFor:"Budget Sennheiser sound", score:80 },
+  { name:"JBL Tour One M3", price:"$299", type:"Over-ear", noiseCancelling:"Good adaptive ANC", batteryLife:"Up to 50 hrs", bestFor:"Budget-friendly ANC", score:84 },
+  { name:"JBL Live 770NC", price:"$129", type:"Over-ear", noiseCancelling:"Basic ANC", batteryLife:"Up to 65 hrs", bestFor:"Entry-level ANC", score:74 },
+  { name:"Beats Studio Pro", price:"$349", type:"Over-ear", noiseCancelling:"Good ANC", batteryLife:"Up to 24 hrs", bestFor:"Apple/Android dual compatibility", score:83 },
+  { name:"Anker Soundcore Space Q45", price:"$99", type:"Over-ear", noiseCancelling:"Surprisingly strong ANC for price", batteryLife:"Up to 50 hrs", bestFor:"Best budget pick", score:78 },
+  { name:"Marshall Major V", price:"$149", type:"On-ear", noiseCancelling:"None", batteryLife:"Up to 100 hrs", bestFor:"Classic style, huge battery", score:76 },
+  { name:"Bowers & Wilkins Px7 S3", price:"$449", type:"Over-ear", noiseCancelling:"Excellent ANC", batteryLife:"Up to 30 hrs", bestFor:"Premium audiophile sound", score:93 },
 ];
 
 const CATEGORY_CONFIG = {
@@ -203,30 +312,74 @@ const CATEGORY_CONFIG = {
 };
 
 let activeCat = 'aitools';
+let selectedA = 0;
+let selectedB = 1;
 
-function populateSelects() {
+function renderSuggestions(inputEl, suggestionsEl, onPick) {
+  const query = inputEl.value.toLowerCase().trim();
   const config = CATEGORY_CONFIG[activeCat];
-  const selectA = document.getElementById('cmpSelectA');
-  const selectB = document.getElementById('cmpSelectB');
+  const matches = config.data
+    .map((item, i) => ({ item, i }))
+    .filter(({ item }) => query === '' || item.name.toLowerCase().includes(query))
+    .slice(0, 8);
 
-  const options = config.data.map((item, i) => `<option value="${i}">${item.name}</option>`).join('');
-  selectA.innerHTML = options;
-  selectB.innerHTML = options;
-  selectB.selectedIndex = Math.min(1, config.data.length - 1);
+  suggestionsEl.innerHTML = matches.length === 0
+    ? '<div class="cmp-suggestion-empty">No matches</div>'
+    : matches.map(({ item, i }) => `<div class="cmp-suggestion-item" data-index="${i}">${item.name}</div>`).join('');
 
+  suggestionsEl.classList.add('open');
+
+  suggestionsEl.querySelectorAll('.cmp-suggestion-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const idx = parseInt(el.dataset.index, 10);
+      inputEl.value = CATEGORY_CONFIG[activeCat].data[idx].name;
+      suggestionsEl.classList.remove('open');
+      onPick(idx);
+    });
+  });
+}
+
+const searchA = document.getElementById('cmpSearchA');
+const searchB = document.getElementById('cmpSearchB');
+const suggestionsA = document.getElementById('cmpSuggestionsA');
+const suggestionsB = document.getElementById('cmpSuggestionsB');
+
+function resetPickerForCategory() {
+  const config = CATEGORY_CONFIG[activeCat];
+  selectedA = 0;
+  selectedB = Math.min(1, config.data.length - 1);
+  searchA.value = config.data[selectedA].name;
+  searchB.value = config.data[selectedB].name;
   renderComparison();
 }
 
+searchA.addEventListener('focus', () => renderSuggestions(searchA, suggestionsA, (i) => { selectedA = i; renderComparison(); }));
+searchA.addEventListener('input', () => renderSuggestions(searchA, suggestionsA, (i) => { selectedA = i; renderComparison(); }));
+searchB.addEventListener('focus', () => renderSuggestions(searchB, suggestionsB, (i) => { selectedB = i; renderComparison(); }));
+searchB.addEventListener('input', () => renderSuggestions(searchB, suggestionsB, (i) => { selectedB = i; renderComparison(); }));
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.cmp-search-wrap')) {
+    suggestionsA.classList.remove('open');
+    suggestionsB.classList.remove('open');
+  }
+});
+
 function renderComparison() {
   const config = CATEGORY_CONFIG[activeCat];
-  const itemA = config.data[document.getElementById('cmpSelectA').value];
-  const itemB = config.data[document.getElementById('cmpSelectB').value];
+  const itemA = config.data[selectedA];
+  const itemB = config.data[selectedB];
   const result = document.getElementById('cmpResult');
 
-  if (itemA.name === itemB.name) {
+  if (!itemA || !itemB || itemA.name === itemB.name) {
     result.innerHTML = '<div class="empty-state">Pick two different items to compare.</div>';
     return;
   }
+
+  const total = itemA.score + itemB.score;
+  const pctA = Math.round((itemA.score / total) * 100);
+  const pctB = 100 - pctA;
+  const winner = itemA.score === itemB.score ? null : (itemA.score > itemB.score ? itemA.name : itemB.name);
 
   result.innerHTML = `
     <div class="cmp-table">
@@ -243,6 +396,18 @@ function renderComparison() {
         ${config.fields.map(f => `<div class="cmp-row">${itemB[f.key]}</div>`).join('')}
       </div>
     </div>
+
+    <div class="cmp-score-section">
+      <div class="cmp-score-labels">
+        <span class="cmp-score-label-a">${itemA.name} — ${pctA}%</span>
+        <span class="cmp-score-label-b">${itemB.name} — ${pctB}%</span>
+      </div>
+      <div class="cmp-score-bar">
+        <div class="cmp-score-fill-a" style="width:${pctA}%"></div>
+        <div class="cmp-score-fill-b" style="width:${pctB}%"></div>
+      </div>
+      ${winner ? `<div class="cmp-score-winner">🏆 ${winner} scores higher overall</div>` : `<div class="cmp-score-winner">🤝 It's a tie overall</div>`}
+    </div>
   `;
 }
 
@@ -251,14 +416,11 @@ document.querySelectorAll('.cmp-tab').forEach(tab => {
     document.querySelectorAll('.cmp-tab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
     activeCat = tab.dataset.cat;
-    populateSelects();
+    resetPickerForCategory();
   });
 });
 
-document.getElementById('cmpSelectA').addEventListener('change', renderComparison);
-document.getElementById('cmpSelectB').addEventListener('change', renderComparison);
-
-populateSelects();
+resetPickerForCategory();
 </script>
 
 <!-- ===== FOOTER ===== -->
@@ -271,7 +433,7 @@ populateSelects();
       <a href="tools.html">Tools</a>
       <a href="compare.html">Compare</a>
       <a href="reviews.html">Reviews</a>
-      <a href="quiz.html">Quiz</a>
+      <a href="chatbot.html">Chatbot</a>
     </div>
   </div>
   <p class="footer-bottom">© 2026 QubixNode. Artificial Intelligence & Networks.</p>
