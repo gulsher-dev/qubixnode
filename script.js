@@ -89,3 +89,31 @@ document.addEventListener('click', (e) => {
     el = el.parentElement;
   }
 });
+
+
+// ===== TYPING SOUND EFFECT (site-wide key tick) =====
+function playTypeSound() {
+  try {
+    const ctx = getAudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(2400, ctx.currentTime);
+    gain.gain.setValueAtTime(0.04, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.04);
+  } catch (e) { /* audio not available, fail silently */ }
+}
+
+// Plays a soft tick on any keystroke inside a text input, search box, or textarea
+document.addEventListener('keydown', (e) => {
+  const tag = e.target.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA') {
+    if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Enter') {
+      playTypeSound();
+    }
+  }
+});
