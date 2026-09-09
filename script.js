@@ -49,3 +49,43 @@ navPill.addEventListener('click', () => {
     navWrapper.classList.add('active');
   }
 });
+
+
+// ===== CLICK SOUND EFFECT (site-wide "ting") =====
+let audioCtx = null;
+function getAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  return audioCtx;
+}
+
+function playClickSound() {
+  try {
+    const ctx = getAudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1800, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.08);
+    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.15);
+  } catch (e) { /* audio not available, fail silently */ }
+}
+
+// Plays on any button, link, or element styled as clickable (cursor: pointer),
+// walking up a few parent levels so clicks on icons/text inside a button still count
+document.addEventListener('click', (e) => {
+  let el = e.target;
+  for (let i = 0; i < 4 && el; i++) {
+    if (el.tagName === 'BUTTON' || el.tagName === 'A' || getComputedStyle(el).cursor === 'pointer') {
+      playClickSound();
+      break;
+    }
+    el = el.parentElement;
+  }
+});
