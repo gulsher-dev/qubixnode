@@ -226,6 +226,21 @@ renderTools();
   <p class="footer-bottom">© 2026 QubixNode. Artificial Intelligence & Networks.</p>
 </footer>
 
-<script src="script.js"></script>
+<script>
+(function(){
+  var tools=[["microsoft copilot","copilot"],["github copilot","github-copilot"],["perplexity","perplexity"],["midjourney","midjourney"],["grammarly","grammarly"],["canva ai","canva-ai"],["notion ai","notion-ai"],["chatgpt","chatgpt"],["gemini","gemini"],["claude","claude"],["cursor","cursor"],["runway","runway"],["jasper","jasper"],["otter","otter"],["pika","pika"]];
+  document.addEventListener('click',function(e){
+    var el=e.target;
+    for(var d=0; el && el!==document.body && d<8; d++, el=el.parentElement){
+      var t=(el.textContent||'').toLowerCase();
+      if(t.length>700) break;
+      for(var i=0;i<tools.length;i++){
+        if(t.indexOf(tools[i][0])!==-1){ location.href='tool.html?slug='+tools[i][1]; return; }
+      }
+    }
+  });
+})();
+</script>
+  <script src="script.js"></script>
 </body>
 </html>
