@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reviews — QubixNode</title>
+<meta name="description" content="Ratings and reviews for AI tools on QubixNode.">
+<link rel="stylesheet" href="style.css">
+<style>
+.rv-head h1{color:var(--white);font-size:clamp(30px,5vw,46px);margin:8px 0 10px}
+.rv-head p{color:var(--slate);max-width:640px;line-height:1.6;margin-bottom:24px}
+.rv-controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+.rv-controls button{background:var(--navy-light);color:var(--slate);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:10px 18px;font-weight:700;cursor:pointer;font:inherit;font-size:13px}
+.rv-controls button.active{background:var(--teal);color:var(--navy);border-color:var(--teal)}
+.rv-list{display:grid;gap:14px}
+.rv-row{display:flex;align-items:center;gap:18px;background:var(--navy-light);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:18px 20px;color:var(--white);transition:border-color .2s,transform .2s}
+.rv-row:hover{border-color:rgba(45,212,191,.5);transform:translateY(-2px)}
+.rv-rank{font-size:22px;font-weight:800;color:var(--teal);width:36px;text-align:center}
+.rv-icon{width:48px;height:48px;border-radius:14px;background:var(--navy);border:1px solid rgba(45,212,191,.35);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:var(--teal);flex-shrink:0}
+.rv-main{flex:1;min-width:0}
+.rv-name{font-size:18px;font-weight:800}
+.rv-verdict{color:var(--slate);font-size:14px;margin-top:4px;line-height:1.4}
+.rv-meta{text-align:right;font-size:13px;font-weight:700;white-space:nowrap}
+.rv-meta .rate{color:#f4b942;font-size:18px}
+.rv-meta .price{color:var(--teal);display:block;margin-top:4px}
+.rv-meta .users{color:var(--slate);display:block;margin-top:4px;font-weight:600;font-size:12px}
+@media(max-width:600px){.rv-row{flex-wrap:wrap}.rv-meta{text-align:left;width:100%}}
+</style>
+</head>
+<body>
+
+<header class="nav-wrapper" id="navWrapper">
+  <div class="nav-pill" id="navPill">
+    <a href="index.html" class="nav-logo"><span class="logo-dot"></span> QubixNode</a>
+    <nav class="nav-links">
+      <div class="nav-item" data-menu="tools"><span>TOOLS</span><svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></div>
+      <div class="nav-item" data-menu="compare"><span>COMPARE</span><svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></div>
+      <div class="nav-item" data-menu="reviews"><span>REVIEWS</span><svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></div>
+      <a href="chatbot.html" class="nav-item"><span>CHATBOT</span></a>
+    </nav>
+    <a href="tools.html" class="nav-cta">EXPLORE TOOLS →</a>
+    <div class="nav-collapsed-label"><span class="pulse-dot"></span> MENU</div>
+  </div>
+  <div class="mega-menu" id="megaMenu">
+    <div class="mega-panel" data-panel="tools"><div class="mega-head"><span class="mega-eyebrow">TOOLS</span><h2>AI Tool Directory</h2><p>Browse the best AI tools by category.</p></div>
+      <div class="mega-cols"><div class="mega-col"><h4>CATEGORIES</h4>
+        <a href="tools.html?cat=writing">Writing</a><a href="tools.html?cat=image">Image</a><a href="tools.html?cat=code">Code</a><a href="tools.html?cat=video">Video</a><a href="tools.html?cat=productivity">Productivity</a><a href="tools.html?cat=chatbots">Chatbots</a></div></div></div>
+    <div class="mega-panel" data-panel="compare"><div class="mega-head"><span class="mega-eyebrow">COMPARE</span><h2>Compare any two</h2><p>AI tools, laptops, phones and headphones head to head.</p></div>
+      <div class="mega-cols"><div class="mega-col"><h4>START</h4><a href="compare.html">Open comparison</a></div></div></div>
+    <div class="mega-panel" data-panel="reviews"><div class="mega-head"><span class="mega-eyebrow">REVIEWS</span><h2>Honest reviews</h2><p>See what people think of each tool.</p></div>
+      <div class="mega-cols"><div class="mega-col"><h4>READ</h4><a href="reviews.html">All reviews</a></div></div></div>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="rv-head">
+    <div class="section-eyebrow">REVIEWS</div>
+    <h1>AI tool ratings &amp; reviews</h1>
+    <p>Our ratings for every tool in the directory. Open a tool to read pros and cons and leave your own review.</p>
+  </div>
+  <div class="rv-controls" id="rvControls">
+    <button data-sort="top" class="active">Top rated</button>
+    <button data-sort="free">Free first</button>
+    <button data-sort="az">A–Z</button>
+  </div>
+  <div class="rv-list" id="rvList"></div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-links"><a href="tools.html">Tools</a> <a href="compare.html">Compare</a> <a href="reviews.html">Reviews</a> <a href="chatbot.html">Chatbot</a></div>
+  <p>© 2026 QubixNode. Artificial Intelligence &amp; Networks.</p>
+</footer>
+
+<script>
+const RV = {"chatgpt":{"n":"ChatGPT","c":"chatbots","p":"Freemium","r":4.8,"d":"OpenAI's conversational assistant for writing, coding, brainstorming and analysis."},"claude":{"n":"Claude","c":"chatbots","p":"Freemium","r":4.8,"d":"Anthropic's assistant, known for long documents, careful reasoning and natural writing."},"gemini":{"n":"Gemini","c":"chatbots","p":"Freemium","r":4.5,"d":"Google's AI assistant, tightly connected to Search, Gmail and Docs."},"perplexity":{"n":"Perplexity","c":"chatbots","p":"Freemium","r":4.6,"d":"An AI search engine that answers questions with cited sources."},"grammarly":{"n":"Grammarly","c":"writing","p":"Freemium","r":4.6,"d":"AI writing assistant that fixes grammar, tone and clarity wherever you type."},"jasper":{"n":"Jasper","c":"writing","p":"Paid","r":4.3,"d":"AI content platform built for marketing teams and brand-voice copy."},"midjourney":{"n":"Midjourney","c":"image","p":"Paid","r":4.7,"d":"Top-tier AI image generator known for artistic, detailed results."},"canva-ai":{"n":"Canva AI","c":"image","p":"Freemium","r":4.5,"d":"Canva's Magic tools: generate images, write text and edit designs with AI."},"github-copilot":{"n":"GitHub Copilot","c":"code","p":"Paid","r":4.6,"d":"AI pair programmer that suggests code and answers questions inside your editor."},"cursor":{"n":"Cursor","c":"code","p":"Freemium","r":4.7,"d":"An AI-first code editor that can edit across your whole project."},"runway":{"n":"Runway","c":"video","p":"Freemium","r":4.4,"d":"AI video generation and editing studio."},"pika":{"n":"Pika","c":"video","p":"Freemium","r":4.2,"d":"Simple AI video generator for short, creative clips."},"notion-ai":{"n":"Notion AI","c":"productivity","p":"Paid","r":4.4,"d":"AI built into Notion for summaries, drafts and answering questions from your notes."},"otter":{"n":"Otter.ai","c":"productivity","p":"Freemium","r":4.3,"d":"AI meeting assistant that records, transcribes and summarizes conversations."},"copilot":{"n":"Microsoft Copilot","c":"productivity","p":"Freemium","r":4.3,"d":"Microsoft's assistant, available on the web and inside Office apps."}};
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function localReviews(){ try{ return JSON.parse(localStorage.getItem('qubixReviews'))||{}; }catch(e){ return {}; } }
+let sortMode='top';
+function render(){
+  const lr=localReviews();
+  let arr=Object.keys(RV).map(k=>Object.assign({slug:k},RV[k]));
+  if(sortMode==='top') arr.sort((a,b)=>b.r-a.r||a.n.localeCompare(b.n));
+  else if(sortMode==='az') arr.sort((a,b)=>a.n.localeCompare(b.n));
+  else { const w={Freemium:0,Paid:1}; arr.sort((a,b)=>(w[a.p]-w[b.p])||b.r-a.r); }
+  document.getElementById('rvList').innerHTML=arr.map((t,i)=>{
+    const n=(lr[t.slug]||[]).length;
+    return '<a class="rv-row" href="tool.html?slug='+t.slug+'"><div class="rv-rank">'+(i+1)+'</div><div class="rv-icon">'+esc(t.n[0])+'</div><div class="rv-main"><div class="rv-name">'+esc(t.n)+'</div><div class="rv-verdict">'+esc(t.d)+'</div></div><div class="rv-meta"><span class="rate">★ '+t.r.toFixed(1)+'</span><span class="price">'+esc(t.p)+'</span>'+(n?'<span class="users">'+n+' review'+(n>1?'s':'')+' from you</span>':'')+'</div></a>';
+  }).join('');
+}
+document.querySelectorAll('#rvControls button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#rvControls button').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); sortMode=b.dataset.sort; render();
+}));
+render();
+</script>
+<script src="script.js"></script>
+</body>
+</html>
