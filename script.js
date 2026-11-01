@@ -117,3 +117,19 @@ document.addEventListener('keydown', (e) => {
     }
   }
 });
+(function(){
+  var nav=document.querySelector('.nav-links');
+  if(nav && !nav.querySelector('a[href="ai-finder.html"]')){
+    var a=document.createElement('a');
+    a.href='ai-finder.html';
+    a.className='nav-item';
+    a.innerHTML='<span>AI FINDER</span>';
+    var chat=nav.querySelector('a[href="chatbot.html"]');
+    nav.insertBefore(a, chat||null);
+  }
+  document.querySelectorAll('.footer-links').forEach(function(f){
+    if(!f.querySelector('a[href="ai-finder.html"]')){
+      f.insertAdjacentHTML('beforeend',' <a href="ai-finder.html">AI Finder</a>');
+    }
+  });
+})();
