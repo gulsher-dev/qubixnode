@@ -137,6 +137,7 @@ document.addEventListener('keydown', (e) => {
   var FEATURES=[
     ['AI Tool Finder','ai-finder.html'],
     ['AI Prompt Generator','ai-prompt.html'],
+    ['AI Text Summarizer','ai-summarizer.html'],
     ['AI Chatbot','chatbot.html']
   ];
   var nav=document.querySelector('.nav-links'), mega=document.getElementById('megaMenu');
