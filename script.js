@@ -167,3 +167,13 @@ document.addEventListener('keydown', (e) => {
     });
   });
 })();
+(function(){
+  var svg="<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='#0B1121'/><polygon points='32,8 52.8,20 52.8,44 32,56 11.2,44 11.2,20' fill='none' stroke='#2DD4BF' stroke-width='4' stroke-linejoin='round'/><path d='M32 32L52.8 20M32 32L11.2 20M32 32V56' stroke='#2DD4BF' stroke-width='4' stroke-linecap='round'/><circle cx='32' cy='32' r='5.5' fill='#ffffff'/></svg>";
+  var l=document.querySelector("link[rel='icon']")||document.createElement('link');
+  l.rel='icon'; l.type='image/svg+xml';
+  l.href='data:image/svg+xml,'+encodeURIComponent(svg);
+  document.head.appendChild(l);
+  if(!document.querySelector("meta[name='theme-color']")){
+    var m=document.createElement('meta'); m.name='theme-color'; m.content='#0B1121'; document.head.appendChild(m);
+  }
+})();
