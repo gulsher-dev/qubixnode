@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Tool Finder — QubixNode</title>
+<meta name="description" content="Describe what you need and AI recommends the best tool.">
+<link rel="stylesheet" href="style.css">
+<style>
+.ft-wrap{max-width:760px}
+.ft-wrap h1{color:var(--white);font-size:clamp(30px,5vw,46px);margin:8px 0 10px}
+.ft-wrap>p{color:var(--slate);line-height:1.6;margin-bottom:22px}
+.ft-box textarea{width:100%;min-height:110px;background:var(--navy-light);color:var(--white);border:1px solid rgba(45,212,191,.35);border-radius:16px;padding:16px;font:inherit;font-size:16px;resize:vertical}
+.ft-box textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 18px rgba(45,212,191,.2)}
+.ft-btn{margin-top:12px;background:var(--teal);color:var(--navy);font-weight:800;border:0;border-radius:999px;padding:14px 28px;cursor:pointer;font-size:15px}
+.ft-btn:disabled{opacity:.6;cursor:wait}
+.ft-chips{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 4px}
+.ft-chips button{background:var(--navy-light);color:var(--slate);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:8px 14px;cursor:pointer;font:inherit;font-size:13px}
+.ft-chips button:hover{color:var(--teal);border-color:var(--teal)}
+#ftResults{margin-top:28px;display:grid;gap:14px}
+.ft-msg{color:var(--slate);line-height:1.6}
+.ft-card{display:block;background:var(--navy-light);border:1px solid rgba(45,212,191,.3);border-radius:18px;padding:20px;color:var(--white);transition:transform .2s,box-shadow .2s}
+.ft-card:hover{transform:translateY(-3px);box-shadow:0 0 22px rgba(45,212,191,.18)}
+.ft-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.ft-icon{width:44px;height:44px;border-radius:12px;background:var(--navy);border:1px solid rgba(45,212,191,.35);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--teal)}
+.ft-name{font-size:18px;font-weight:800}
+.ft-tag{font-size:12px;color:var(--teal);font-weight:700}
+.ft-why{color:#cbd5e1;line-height:1.5;font-size:14.5px}
+.ft-go{display:inline-block;margin-top:10px;color:var(--teal);font-weight:800;font-size:13px}
+</style>
+</head>
+<body>
+
+<header class="nav-wrapper" id="navWrapper">
+  <div class="nav-pill" id="navPill">
+    <a href="index.html" class="nav-logo"><span class="logo-dot"></span> QubixNode</a>
+    <nav class="nav-links">
+      <div class="nav-item" data-menu="tools"><span>TOOLS</span><svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></div>
+      <div class="nav-item" data-menu="compare"><span>COMPARE</span><svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></div>
+      <div class="nav-item" data-menu="reviews"><span>REVIEWS</span><svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></div>
+      <a href="chatbot.html" class="nav-item"><span>CHATBOT</span></a>
+    </nav>
+    <a href="tools.html" class="nav-cta">EXPLORE TOOLS →</a>
+    <div class="nav-collapsed-label"><span class="pulse-dot"></span> MENU</div>
+  </div>
+  <div class="mega-menu" id="megaMenu">
+    <div class="mega-panel" data-panel="tools"><div class="mega-head"><span class="mega-eyebrow">TOOLS</span><h2>AI Tool Directory</h2><p>Browse the best AI tools by category.</p></div>
+      <div class="mega-cols"><div class="mega-col"><h4>CATEGORIES</h4>
+        <a href="tools.html?cat=writing">Writing</a><a href="tools.html?cat=image">Image</a><a href="tools.html?cat=code">Code</a><a href="tools.html?cat=video">Video</a><a href="tools.html?cat=productivity">Productivity</a><a href="tools.html?cat=chatbots">Chatbots</a></div></div></div>
+    <div class="mega-panel" data-panel="compare"><div class="mega-head"><span class="mega-eyebrow">COMPARE</span><h2>Compare any two</h2><p>AI tools, laptops, phones and headphones head to head.</p></div>
+      <div class="mega-cols"><div class="mega-col"><h4>START</h4><a href="compare.html">Open comparison</a></div></div></div>
+    <div class="mega-panel" data-panel="reviews"><div class="mega-head"><span class="mega-eyebrow">REVIEWS</span><h2>Honest reviews</h2><p>See what people think of each tool.</p></div>
+      <div class="mega-cols"><div class="mega-col"><h4>READ</h4><a href="reviews.html">All reviews</a></div></div></div>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="ft-wrap">
+    <div class="section-eyebrow">AI TOOL FINDER</div>
+    <h1>Tell us what you need.</h1>
+    <p>Describe your task in your own words and our AI will pick the best tools from the QubixNode directory.</p>
+    <div class="ft-box">
+      <textarea id="ftInput" maxlength="300" placeholder="Example: I want to edit videos for free for Instagram Reels"></textarea>
+      <button class="ft-btn" id="ftBtn">Find my tool</button>
+    </div>
+    <div class="ft-chips" id="ftChips">
+      <button>Write better essays</button>
+      <button>Make images for social media</button>
+      <button>Help me code faster</button>
+      <button>Turn meetings into notes</button>
+      <button>Make short videos</button>
+    </div>
+    <div id="ftResults"></div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-links"><a href="tools.html">Tools</a> <a href="compare.html">Compare</a> <a href="reviews.html">Reviews</a> <a href="chatbot.html">Chatbot</a></div>
+  <p>© 2026 QubixNode. Artificial Intelligence &amp; Networks.</p>
+</footer>
+
+<script>
+const WORKER_URL = 'https://qubixnode-chat.muhammadgulsher343.workers.dev/';
+const TOOLS = {
+ "chatgpt":["ChatGPT","Chatbot","Freemium","General assistant for writing, coding and brainstorming"],
+ "claude":["Claude","Chatbot","Freemium","Long documents, careful reasoning, natural writing"],
+ "gemini":["Gemini","Chatbot","Freemium","Google's assistant connected to Search, Gmail and Docs"],
+ "perplexity":["Perplexity","Chatbot","Freemium","AI search with cited sources, quick research"],
+ "grammarly":["Grammarly","Writing","Freemium","Fixes grammar, tone and clarity while you type"],
+ "jasper":["Jasper","Writing","Paid","Marketing copy and brand-voice content"],
+ "midjourney":["Midjourney","Image","Paid","Artistic, high-quality AI images"],
+ "canva-ai":["Canva AI","Image","Freemium","Design, images and social media graphics with AI"],
+ "github-copilot":["GitHub Copilot","Code","Paid","AI code suggestions inside your editor"],
+ "cursor":["Cursor","Code","Freemium","AI-first code editor that edits whole projects"],
+ "runway":["Runway","Video","Freemium","AI video generation and editing"],
+ "pika":["Pika","Video","Freemium","Simple short AI video clips"],
+ "notion-ai":["Notion AI","Productivity","Paid","Summaries and drafts inside Notion notes"],
+ "otter":["Otter.ai","Productivity","Freemium","Records, transcribes and summarizes meetings"],
+ "copilot":["Microsoft Copilot","Productivity","Freemium","Assistant for the web and Microsoft Office apps"]
+};
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+const input=document.getElementById('ftInput'), btn=document.getElementById('ftBtn'), out=document.getElementById('ftResults');
+
+function buildPrompt(need){
+  const list=Object.keys(TOOLS).map(k=>k+' | '+TOOLS[k].join(' | ')).join('\n');
+  return 'You are the QubixNode AI Tool Finder. Pick the 1 to 3 best tools for the user need, using ONLY tools from this list (format: slug | name | category | price | what it does):\n'+list+'\n\nUser need: '+need+'\n\nReply with ONLY lines in exactly this format, with no other text: slug|one short sentence on why it fits. Use the slug exactly as written. If nothing fits, reply with only: NONE';
+}
+function parse(text){
+  const res=[];
+  text.split('\n').forEach(line=>{
+    const clean=line.replace(/\*\*/g,'').replace(/^[\s*\-\u2022\d.)]+/,'').trim();
+    const m=clean.match(/^([a-z0-9-]+)\s*\|\s*(.+)$/i);
+    if(m){ const slug=m[1].toLowerCase(); if(TOOLS[slug] && !res.some(r=>r.slug===slug)) res.push({slug:slug,why:m[2].trim()}); }
+  });
+  return res.slice(0,3);
+}
+async function find(){
+  const need=input.value.trim();
+  if(need.length<4){ out.innerHTML='<div class="ft-msg">Please describe what you need in a few words.</div>'; return; }
+  btn.disabled=true; btn.textContent='Finding...';
+  out.innerHTML='<div class="ft-msg">Searching the directory...</div>';
+  try{
+    const r=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:buildPrompt(need)})});
+    const data=await r.json();
+    const picks=parse(String(data.reply||''));
+    if(!picks.length){
+      out.innerHTML='<div class="ft-msg">We could not find a perfect match. Try describing it a little differently, or <a href="tools.html" style="color:var(--teal)">browse the full directory</a>.</div>';
+    } else {
+      out.innerHTML=picks.map(p=>{const t=TOOLS[p.slug];return '<a class="ft-card" href="tool.html?slug='+p.slug+'"><div class="ft-top"><div class="ft-icon">'+esc(t[0][0])+'</div><div><div class="ft-name">'+esc(t[0])+'</div><div class="ft-tag">'+esc(t[1])+' \u2022 '+esc(t[2])+'</div></div></div><div class="ft-why">'+esc(p.why)+'</div><span class="ft-go">See pros, cons &amp; reviews \u2192</span></a>';}).join('');
+    }
+  }catch(e){
+    out.innerHTML='<div class="ft-msg">Something went wrong. Please try again in a moment.</div>';
+  }
+  btn.disabled=false; btn.textContent='Find my tool';
+}
+btn.addEventListener('click',find);
+input.addEventListener('keydown',e=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); find(); } });
+document.querySelectorAll('#ftChips button').forEach(b=>b.addEventListener('click',()=>{ input.value=b.textContent; find(); }));
+</script>
+<script src="script.js"></script>
+</body>
+</html>
