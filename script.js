@@ -133,3 +133,36 @@ document.addEventListener('keydown', (e) => {
     }
   });
 })();
+(function(){
+  var FEATURES=[
+    ['AI Tool Finder','ai-finder.html'],
+    ['AI Prompt Generator','ai-prompt.html'],
+    ['AI Chatbot','chatbot.html']
+  ];
+  var nav=document.querySelector('.nav-links'), mega=document.getElementById('megaMenu');
+  if(!nav||!mega||document.querySelector('[data-menu="aifeatures"]')) return;
+  var old=nav.querySelector('a[href="ai-finder.html"]'); if(old) old.remove();
+  var others=document.querySelectorAll('.nav-item');
+  var item=document.createElement('div');
+  item.className='nav-item'; item.setAttribute('data-menu','aifeatures');
+  item.innerHTML='<span>AI FEATURES</span><svg class="chevron" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>';
+  var chat=nav.querySelector('a[href="chatbot.html"]');
+  nav.insertBefore(item, chat||null);
+  var panel=document.createElement('div');
+  panel.className='mega-panel'; panel.setAttribute('data-panel','aifeatures');
+  panel.innerHTML='<div class="mega-head"><span class="mega-eyebrow">AI FEATURES</span><h2>Smart tools, powered by AI</h2><p>New features are added every month.</p></div><div class="mega-cols"><div class="mega-col"><h4>TRY NOW</h4>'+FEATURES.map(function(f){return '<a href="'+f[1]+'">'+f[0]+'</a>';}).join('')+'</div></div>';
+  mega.appendChild(panel);
+  item.addEventListener('mouseenter',function(){
+    document.querySelectorAll('.mega-panel').forEach(function(p){p.classList.toggle('active',p===panel);});
+    document.querySelectorAll('.nav-item').forEach(function(i){i.classList.toggle('active',i===item);});
+    mega.classList.add('open');
+  });
+  others.forEach(function(o){
+    o.addEventListener('mouseenter',function(){ panel.classList.remove('active'); item.classList.remove('active'); });
+  });
+  document.querySelectorAll('.footer-links').forEach(function(f){
+    FEATURES.slice(0,2).forEach(function(x){
+      if(!f.querySelector('a[href="'+x[1]+'"]')) f.insertAdjacentHTML('beforeend',' <a href="'+x[1]+'">'+x[0]+'</a>');
+    });
+  });
+})();
