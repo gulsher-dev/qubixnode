@@ -177,3 +177,18 @@ document.addEventListener('keydown', (e) => {
     var m=document.createElement('meta'); m.name='theme-color'; m.content='#0B1121'; document.head.appendChild(m);
   }
 })();
+(function(){
+  var L=[['About','about.html'],['Contact','contact.html'],['Privacy','privacy.html']];
+  var boxes=document.querySelectorAll('.footer-links');
+  if(!boxes.length){
+    var ft=document.querySelector('footer');
+    if(!ft) return;
+    var d=document.createElement('div'); d.className='footer-links'; d.style.marginTop='10px';
+    ft.appendChild(d); boxes=[d];
+  }
+  Array.prototype.forEach.call(boxes,function(f){
+    L.forEach(function(x){
+      if(!f.querySelector('a[href="'+x[1]+'"]')) f.insertAdjacentHTML('beforeend',' <a href="'+x[1]+'">'+x[0]+'</a>');
+    });
+  });
+})();
