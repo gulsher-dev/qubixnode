@@ -121,7 +121,42 @@
     </div>
   </div>
   <p class="footer-bottom">© 2026 QubixNode. Artificial Intelligence & Networks.</p>
-</footer>
+</footer> <section class="trending-section">
+<style>
+.trending-section{max-width:1100px;margin:0 auto;padding:70px 20px 40px}
+.trending-eyebrow{color:var(--teal);font-size:12px;font-weight:800;letter-spacing:2px}
+.trending-title{color:var(--white);font-size:clamp(28px,4vw,40px);margin:8px 0 10px}
+.trending-sub{color:var(--slate);font-size:15px;margin-bottom:28px}
+.trending-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.trend-card{display:block;background:var(--navy-light);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:22px;color:var(--white);position:relative;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.trend-card:hover{transform:translateY(-4px);border-color:rgba(45,212,191,.5);box-shadow:0 0 22px rgba(45,212,191,.18)}
+.trend-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.trend-icon{width:46px;height:46px;border-radius:14px;background:var(--navy);border:1px solid rgba(45,212,191,.35);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:var(--teal)}
+.trend-name{font-size:18px;font-weight:800}
+.trend-cat{font-size:11px;color:var(--slate);letter-spacing:1px;text-transform:uppercase}
+.trend-desc{color:var(--slate);font-size:14px;line-height:1.5;margin-bottom:14px}
+.trend-meta{display:flex;justify-content:space-between;font-size:13px;font-weight:700}
+.trend-meta .price{color:var(--teal)}
+.trend-meta .rate{color:#f4b942}
+.trend-new{position:absolute;top:14px;right:14px;background:var(--teal);color:var(--navy);font-size:10px;font-weight:800;letter-spacing:1px;padding:4px 9px;border-radius:999px}
+.trending-more{display:inline-block;margin-top:26px;color:var(--teal);font-weight:800;font-size:14px}
+.drop-strip{margin-top:34px;background:var(--navy-light);border:1px solid rgba(45,212,191,.3);border-radius:16px;padding:18px 22px;color:var(--white);font-size:14.5px}
+.drop-strip b{color:var(--teal)}
+</style>
+<div class="trending-eyebrow">TRENDING NOW</div>
+<h2 class="trending-title">Popular AI tools right now</h2>
+<p class="trending-sub">The tools people are using the most. Click one for pros, cons and reviews.</p>
+<div class="trending-grid">
+  <a class="trend-card" href="tool.html?slug=chatgpt"><div class="trend-top"><div class="trend-icon">C</div><div><div class="trend-name">ChatGPT</div><div class="trend-cat">Chatbot</div></div></div><p class="trend-desc">OpenAI's assistant for writing, coding and brainstorming.</p><div class="trend-meta"><span class="price">Freemium</span><span class="rate">★ 4.8</span></div></a>
+  <a class="trend-card" href="tool.html?slug=claude"><span class="trend-new">NEW</span><div class="trend-top"><div class="trend-icon">C</div><div><div class="trend-name">Claude</div><div class="trend-cat">Chatbot</div></div></div><p class="trend-desc">Great with long documents and natural writing.</p><div class="trend-meta"><span class="price">Freemium</span><span class="rate">★ 4.8</span></div></a>
+  <a class="trend-card" href="tool.html?slug=midjourney"><div class="trend-top"><div class="trend-icon">M</div><div><div class="trend-name">Midjourney</div><div class="trend-cat">Image</div></div></div><p class="trend-desc">Top-tier AI images with artistic, detailed results.</p><div class="trend-meta"><span class="price">Paid</span><span class="rate">★ 4.7</span></div></a>
+  <a class="trend-card" href="tool.html?slug=cursor"><span class="trend-new">NEW</span><div class="trend-top"><div class="trend-icon">C</div><div><div class="trend-name">Cursor</div><div class="trend-cat">Code</div></div></div><p class="trend-desc">An AI-first code editor that edits across your project.</p><div class="trend-meta"><span class="price">Freemium</span><span class="rate">★ 4.7</span></div></a>
+  <a class="trend-card" href="tool.html?slug=canva-ai"><div class="trend-top"><div class="trend-icon">C</div><div><div class="trend-name">Canva AI</div><div class="trend-cat">Image</div></div></div><p class="trend-desc">Design, images and text with easy AI tools.</p><div class="trend-meta"><span class="price">Freemium</span><span class="rate">★ 4.5</span></div></a>
+  <a class="trend-card" href="tool.html?slug=perplexity"><div class="trend-top"><div class="trend-icon">P</div><div><div class="trend-name">Perplexity</div><div class="trend-cat">Chatbot</div></div></div><p class="trend-desc">AI search that answers with cited sources.</p><div class="trend-meta"><span class="price">Freemium</span><span class="rate">★ 4.6</span></div></a>
+</div>
+<a class="trending-more" href="tools.html">See all AI tools →</a>
+<div class="drop-strip">🧊 <b>New tool drop every 15 days.</b> Follow us on Instagram so you never miss one.</div>
+</section>
 
 <script src="script.js"></script>
 </body>
